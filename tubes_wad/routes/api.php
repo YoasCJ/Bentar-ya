@@ -9,6 +9,7 @@ use App\Http\Controllers\SkillExchangeController;
 // Public routes (no authentication required)
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::get('/login', [LoginController::class, 'showLoginForm']);
 Route::get('/skills', [SkillExchangeController::class, 'getSkills']); // Get all available skills
 
 // Protected routes (authentication required using Sanctum)
