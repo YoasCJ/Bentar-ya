@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Header -->
     <div class="flex justify-between items-center mb-8">
         <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
         <button onclick="openCreateModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
@@ -13,13 +12,12 @@
         </button>
     </div>
 
-    <!-- Search and Filter -->
     <div class="mb-6 flex flex-col sm:flex-row gap-4">
         <form method="GET" action="{{ route('dashboard') }}" class="flex-1">
             <div class="relative">
                 <input type="text" name="search" value="{{ request('search') }}" 
-                       placeholder="Search posts..." 
-                       class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        placeholder="Search posts..." 
+                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                 <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
             </div>
         </form>
@@ -34,7 +32,6 @@
         </form>
     </div>
 
-    <!-- Posts Grid -->
     @if($posts->count() > 0)
     <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         @foreach($posts as $post)
@@ -83,15 +80,23 @@
                     <i class="fas fa-calendar mr-1"></i>
                     Deadline: {{ $post->deadline->format('M d, Y') }}
                 </span>
-                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm">
-                    {{ $post->type == 'open' ? 'Contact' : 'Offer Help' }}
-                </button>
+                {{-- MODIFIKASI DIMULAI DI SINI --}}
+                @if($post->user_id != auth()->id()) {{-- Hanya tampilkan tombol kontak jika bukan post sendiri --}}
+                    {{-- Tombol Contact/Offer Help akan jadi link Email --}}
+                    <a href="mailto:{{ $post->user->email }}" 
+                       class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm inline-flex items-center">
+                        <i class="fas fa-envelope mr-2"></i> {{ $post->type == 'open' ? 'Contact' : 'Offer Help' }}
+                    </a>
+                @else
+                    {{-- Jika ini post user sendiri, mungkin tampilkan sesuatu yang berbeda atau kosong --}}
+                    <span class="text-sm text-gray-500">Your Post</span>
+                @endif
+                {{-- MODIFIKASI SELESAI DI SINI --}}
             </div>
         </div>
         @endforeach
     </div>
 
-    <!-- Pagination -->
     <div class="mt-8">
         {{ $posts->links() }}
     </div>
@@ -114,7 +119,6 @@
     @endif
 </div>
 
-<!-- Create Post Modal -->
 <div id="createModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
     <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
         <div class="mt-3">
@@ -145,13 +149,13 @@
                     <div>
                         <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
                         <input type="text" name="title" id="title" required 
-                               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     
                     <div>
                         <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
                         <textarea name="description" id="description" rows="4" required 
-                                  class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
+                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
                     </div>
                     
                     <div>
@@ -170,8 +174,8 @@
                         <div>
                             <label for="deadline" class="block text-sm font-medium text-gray-700">Deadline</label>
                             <input type="date" name="deadline" id="deadline" required 
-                                   min="{{ date('Y-m-d', strtotime('+1 day')) }}"
-                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                    min="{{ date('Y-m-d', strtotime('+1 day')) }}"
+                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         
                         <div>
@@ -201,7 +205,6 @@
     </div>
 </div>
 
-<!-- Edit Post Modal -->
 <div id="editModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
     <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
         <div class="mt-3">
@@ -233,13 +236,13 @@
                     <div>
                         <label for="editTitle" class="block text-sm font-medium text-gray-700">Title</label>
                         <input type="text" name="title" id="editTitle" required 
-                               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     
                     <div>
                         <label for="editDescription" class="block text-sm font-medium text-gray-700">Description</label>
                         <textarea name="description" id="editDescription" rows="4" required 
-                                  class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
+                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
                     </div>
                     
                     <div>
@@ -258,8 +261,8 @@
                         <div>
                             <label for="editDeadline" class="block text-sm font-medium text-gray-700">Deadline</label>
                             <input type="date" name="deadline" id="editDeadline" required 
-                                   min="{{ date('Y-m-d', strtotime('+1 day')) }}"
-                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                    min="{{ date('Y-m-d', strtotime('+1 day')) }}"
+                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         
                         <div>
@@ -289,7 +292,6 @@
     </div>
 </div>
 
-<!-- Delete Confirmation Modal -->
 <div id="deleteModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
     <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
         <div class="mt-3 text-center">
