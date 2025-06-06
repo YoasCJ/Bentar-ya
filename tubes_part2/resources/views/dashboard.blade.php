@@ -88,10 +88,8 @@
                         <i class="fas fa-envelope mr-2"></i> {{ $post->type == 'open' ? 'Contact' : 'Offer Help' }}
                     </a>
                 @else
-                    {{-- Jika ini post user sendiri, mungkin tampilkan sesuatu yang berbeda atau kosong --}}
                     <span class="text-sm text-gray-500">Your Post</span>
                 @endif
-                {{-- MODIFIKASI SELESAI DI SINI --}}
             </div>
         </div>
         @endforeach
