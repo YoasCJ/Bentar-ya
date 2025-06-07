@@ -20,7 +20,7 @@ class RoleMiddleware
         $user = Auth::user();
 
         // 2. Periksa apakah peran user (role) ada di daftar peran yang diizinkan ($roles)
-        if (!in_array($user->role, $roles)) {
+        if (!in_array($request->user()?->role, $roles)) {
             // Jika tidak, tendang ke halaman dashboard biasa
             return redirect('/dashboard')->with('error', 'Anda tidak memiliki izin untuk mengakses halaman ini.');
         }
@@ -28,4 +28,4 @@ class RoleMiddleware
         // Jika semua oke, izinkan user masuk ke halaman yang dituju
         return $next($request);
     }
-}
+}                                                                                                                                       

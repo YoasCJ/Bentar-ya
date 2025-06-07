@@ -35,4 +35,8 @@ class DashboardController extends Controller
 
         return view('dashboard', compact('posts', 'skills'));
     }
+
+    public function adminDashboard(){
+        return view('admin.dashboard');
+    }
 }

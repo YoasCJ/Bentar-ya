@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController; 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ScheduleController;
@@ -48,6 +49,6 @@ Route::middleware('auth')->group(function () {
 });     
 
 // Rute khusus untuk Dashboard Admin
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard'); // Membuka file tampilan yang baru saja kita buat
-})->middleware('role:admin')->name('admin.dashboard');
+Route::middleware('role:admin')->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+});
