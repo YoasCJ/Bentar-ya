@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ScheduleController;
@@ -48,6 +49,27 @@ Route::middleware('auth')->group(function () {
 });     
 
 // Rute khusus untuk Dashboard Admin
+<<<<<<< Updated upstream
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard'); // Membuka file tampilan yang baru saja kita buat
 })->middleware('role:admin')->name('admin.dashboard');
+=======
+Route::middleware('role:admin')->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'index']);
+});
+
+Route::middleware(['role:admin'])->prefix('admin')->group(function () {
+
+    // Rute untuk dashboard admin utama
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+
+    // Rute untuk Manajemen Pengguna
+    Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
+
+    // Rute untuk Manajemen Postingan
+    Route::get('/posts', [AdminController::class, 'posts'])->name('admin.posts');
+
+    // Rute untuk Manajemen Skill
+    Route::get('/skills', [AdminController::class, 'skills'])->name('admin.skills');
+});
+>>>>>>> Stashed changes
