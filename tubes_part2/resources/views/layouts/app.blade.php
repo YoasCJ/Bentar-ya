@@ -32,15 +32,12 @@
     <nav class="bg-white shadow-sm border-b">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
-                {{-- PERBAIKAN DI SINI: Tambahkan 'items-center' ke div flex ini --}}
                 <div class="flex items-center"> 
                     <div class="flex-shrink-0 flex items-center">
                         <a href="{{ route('dashboard') }}" class="text-xl font-bold text-blue-600">
                             <i class="fas fa-exchange-alt mr-2"></i>Skill Exchange
                         </a>
                     </div>
-                    {{-- MENU NAVIGASI UNTUK DESKTOP --}}
-                    {{-- PERBAIKAN DI SINI: Tambahkan 'items-center' ke div flex ini --}}
                     <div class="hidden sm:ml-6 sm:flex sm:space-x-8 items-center"> 
                         <a href="{{ route('dashboard') }}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm {{ request()->routeIs('dashboard') ? 'border-blue-500 text-blue-600' : '' }}">
                             Dashboard
@@ -51,6 +48,11 @@
                         <a href="{{ route('profile') }}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm {{ request()->routeIs('profile') ? 'border-blue-500 text-blue-600' : '' }}">
                             Profile
                         </a>
+                        @if(Auth::check() && Auth::user()->role === 'admin')
+                        <a href="{{ route('admin.dashboard') }}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm {{ request()->routeIs('admin.dashboard') ? 'border-blue-500 text-blue-600' : '' }}">
+                            Admin Panel
+                        </a>
+                        @endif
                     </div>
                 </div>
                 <div class="flex items-center">

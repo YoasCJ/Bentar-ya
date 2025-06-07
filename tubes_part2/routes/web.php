@@ -46,3 +46,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/portfolio/{portfolio}', [PortfolioController::class, 'update'])->name('portfolio.update');
     Route::delete('/portfolio/{portfolio}', [PortfolioController::class, 'destroy'])->name('portfolio.destroy');
 });     
+
+// Rute khusus untuk Dashboard Admin
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard'); // Membuka file tampilan yang baru saja kita buat
+})->middleware('role:admin')->name('admin.dashboard');
