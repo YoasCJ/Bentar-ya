@@ -5,7 +5,7 @@
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <h1 class="text-3xl font-bold text-gray-900 mb-6">Selamat Datang di Dashboard Admin!</h1>
-    <p class="text-gray-700">Ini adalah area khusus untuk Administrator. Anda bisa menambahkan link ke pengelolaan user, postingan, dll. di sini.</p>
+    <p class="text-gray-700">Ini adalah area khusus untuk Administrator. Anda bisa menambahkan link ke pengelolaan user, postingan, dan lain lain di sini.</p>
 
     <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {{-- Kotak untuk Manajemen Pengguna --}}
