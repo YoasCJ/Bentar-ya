@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ProfileApiController;
 // Auth (tidak perlu token)
 Route::post('/register', [AuthApiController::class, 'register']);
 Route::post('/login', [AuthApiController::class, 'login']);
+Route::middleware('auth:sanctum')->post('/logout', [AuthApiController::class, 'logout']);
 
 // Route yang tidak perlu login (GET publik)
 Route::get('/posts', [PostApiController::class, 'index']);
