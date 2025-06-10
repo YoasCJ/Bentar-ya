@@ -90,7 +90,7 @@
     @endif
 </div>
 
-<!-- Create Schedule Modal -->
+
 <div id="createScheduleModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
     <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-1/2 shadow-lg rounded-md bg-white">
         <div class="mt-3">
@@ -162,7 +162,7 @@
     </div>
 </div>
 
-<!-- Edit Schedule Modal -->
+
 <div id="editScheduleModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
     <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-1/2 shadow-lg rounded-md bg-white">
         <div class="mt-3">
