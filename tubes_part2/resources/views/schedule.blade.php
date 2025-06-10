@@ -296,7 +296,7 @@
         document.getElementById('deleteScheduleForm').action = '/schedule/' + scheduleId;
     }
     
-    // Combine date and time for scheduled_at
+
     document.querySelector('#createScheduleModal form').addEventListener('submit', function(e) {
         const date = document.getElementById('scheduled_date').value;
         const time = document.getElementById('scheduled_time').value;
