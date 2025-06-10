@@ -284,19 +284,19 @@
         document.getElementById('deleteScheduleModal').classList.add('hidden');
     }
     
-    // Edit schedule
+
     function editSchedule(scheduleId) {
         document.getElementById('editScheduleModal').classList.remove('hidden');
         document.getElementById('editScheduleForm').action = '/schedule/' + scheduleId;
     }
     
-    // Delete schedule
+
     function deleteSchedule(scheduleId) {
         document.getElementById('deleteScheduleModal').classList.remove('hidden');
         document.getElementById('deleteScheduleForm').action = '/schedule/' + scheduleId;
     }
     
-    // Combine date and time for scheduled_at
+
     document.querySelector('#createScheduleModal form').addEventListener('submit', function(e) {
         const date = document.getElementById('scheduled_date').value;
         const time = document.getElementById('scheduled_time').value;
