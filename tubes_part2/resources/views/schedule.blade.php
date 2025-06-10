@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Header -->
+
     <div class="flex justify-between items-center mb-8">
         <h1 class="text-3xl font-bold text-gray-900">Schedule</h1>
         <button onclick="openCreateScheduleModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
@@ -284,13 +284,13 @@
         document.getElementById('deleteScheduleModal').classList.add('hidden');
     }
     
-    // Edit schedule
+
     function editSchedule(scheduleId) {
         document.getElementById('editScheduleModal').classList.remove('hidden');
         document.getElementById('editScheduleForm').action = '/schedule/' + scheduleId;
     }
     
-    // Delete schedule
+
     function deleteSchedule(scheduleId) {
         document.getElementById('deleteScheduleModal').classList.remove('hidden');
         document.getElementById('deleteScheduleForm').action = '/schedule/' + scheduleId;
