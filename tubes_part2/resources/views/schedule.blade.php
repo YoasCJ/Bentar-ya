@@ -13,7 +13,7 @@
         </button>
     </div>
 
-    <!-- Schedules Table -->
+
     @if($schedules->count() > 0)
     <div class="bg-white shadow overflow-hidden sm:rounded-md">
         <ul class="divide-y divide-gray-200">
@@ -73,7 +73,7 @@
         </ul>
     </div>
 
-    <!-- Pagination -->
+
     <div class="mt-8">
         {{ $schedules->links() }}
     </div>
