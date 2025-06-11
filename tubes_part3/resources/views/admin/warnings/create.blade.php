@@ -52,6 +52,10 @@
                     <option value="Tindakan Akun (Blokir/Suspend)" {{ old('warning_type') == 'Tindakan Akun (Blokir/Suspend)' ? 'selected' : '' }}>Tindakan Akun (Blokir/Suspend)</option>
                     <option value="Pengumuman Penting" {{ old('warning_type') == 'Pengumuman Penting' ? 'selected' : '' }}>Pengumuman Penting</option>
                     <option value="Lain-lain" {{ old('warning_type') == 'Lain-lain' ? 'selected' : '' }}>Lain-lain</option>
+                    <option value="violation" {{ old('warning_type') == 'violation' ? 'selected' : '' }}>Pelanggaran Aturan</option>
+                    <option value="account_action" {{ old('warning_type') == 'account_action' ? 'selected' : '' }}>Tindakan Akun (Blokir/Suspend)</option>
+                    <option value="announcement" {{ old('warning_type') == 'announcement' ? 'selected' : '' }}>Pengumuman Penting</option>
+                    <option value="other" {{ old('warning_type') == 'other' ? 'selected' : '' }}>Lain-lain</option>
                 </select>
                 @error('warning_type')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>

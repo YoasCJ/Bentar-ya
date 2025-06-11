@@ -64,10 +64,17 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $warning->id }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $warning->user->name ?? 'N/A' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $warning->admin->name ?? 'N/A' }}</td>
+
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $warning->level ?? 'N/A' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ Str::limit($warning->title ?? '', 40) }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ ucfirst($warning->status ?? 'N/A') }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $warning->created_at->format('d M Y H:i') ?? 'N/A' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $warning->warning_type }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ Str::limit($warning->subject, 40) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ ucfirst($warning->status) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $warning->created_at->format('d M Y H:i') }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 
                             @if (Route::has('admin.warnings.show'))

@@ -3,6 +3,9 @@ use App\Models\User;
 use App\Models\Post; 
 use App\Models\Portfolio;
 use App\Http\Controllers\AuthController;
+
+use App\Http\Controllers\Api\AuthApiController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ScheduleController;
@@ -16,11 +19,11 @@ Route::get('/', function () {
 })->name('home');
 
 // Authentication routes
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/register', [AuthApiController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthApiController::class, 'register']);
+Route::get('/login', [AuthApiController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthApiController::class, 'login']);
+Route::post('/logout', [AuthApiController::class, 'logout'])->name('logout');
 
 // Protected routes
 Route::middleware('auth')->group(function () {
@@ -96,4 +99,22 @@ Route::middleware(['role:admin'])->prefix('admin')->group(function () {
         return view('admin.skills', compact('skills'));
     })->name('admin.skills');
 
+});
+Route::middleware('role:admin')->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'index']);
+});
+
+Route::middleware(['role:admin'])->prefix('admin')->group(function () {
+
+    // Rute untuk dashboard admin utama
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+
+    // Rute untuk Manajemen Pengguna
+    Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
+
+    // Rute untuk Manajemen Postingan
+    Route::get('/posts', [AdminController::class, 'posts'])->name('admin.posts');
+
+    // Rute untuk Manajemen Skill
+    Route::get('/skills', [AdminController::class, 'skills'])->name('admin.skills');
 });

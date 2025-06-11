@@ -71,6 +71,9 @@ class AdminController extends Controller
             $post->delete();
             return redirect()->route('admin.posts.index')->with('success', 'Postingan berhasil dihapus.');
         } catch (\Exception $e) {
+            $post->delete(); // Hapus postingan dari database
+            return redirect()->route('admin.posts.index')->with('success', 'Postingan berhasil dihapus.');
+        } catch (\Exception $e) {
             \Log::error('Error deleting post: ' . $e->getMessage(), ['post_id' => $post->id]);
             return back()->with('error', 'Gagal menghapus postingan: ' . $e->getMessage());
         }
@@ -88,6 +91,9 @@ class AdminController extends Controller
             $portfolio->delete();
             return redirect()->route('admin.portfolios.index')->with('success', 'Portfolio berhasil dihapus.');
         } catch (\Exception $e) {
+            $portfolio->delete(); // Hapus portfolio dari database
+            return redirect()->route('admin.portfolios.index')->with('success', 'Portfolio berhasil dihapus.');
+        } catch (\Exception $e) {
             \Log::error('Error deleting portfolio: ' . $e->getMessage(), ['portfolio_id' => $portfolio->id]);
             return back()->with('error', 'Gagal menghapus portfolio: ' . $e->getMessage());
         }
@@ -96,6 +102,7 @@ class AdminController extends Controller
     public function warnings()
     {
         $warnings = Warning::with(['user', 'admin'])->latest()->paginate(20); 
+        $warnings = Warning::with('warning')->latest()->paginate(20);
         return view('admin.warnings.index', compact('warnings'));
     }
 
@@ -104,7 +111,7 @@ class AdminController extends Controller
         $users = User::orderBy('name')->get();
         return view('admin.warnings.create', compact('users'));
     }
-
+  
     public function storeWarning(Request $request)
     {
         try {

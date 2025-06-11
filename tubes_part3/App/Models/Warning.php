@@ -20,6 +20,15 @@ class Warning extends Model
         'status',
     ];
 
+        'user_id',
+        'admin_id',
+        'warning_type',
+        'subject',
+        'message',
+        'status',
+        'expires_at',
+    ];
+
     protected $casts = [
         'expires_at' => 'datetime',
     ];
@@ -29,8 +38,15 @@ class Warning extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+
     public function admin()
     {
         return $this->belongsTo(User::class, 'admin_id');
+
+    // Relasi dengan Admin yang mengeluarkan peringatan
+    public function admin()
+    {
+        return $this->belongsTo(User::class, 'admin_id'); // Asumsi admin juga menggunakan model User
+
     }
 }
