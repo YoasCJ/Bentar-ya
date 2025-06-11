@@ -3,12 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Portfolio;
-use App\Models\Skill;
+use App\Models\Skill; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PortfolioController extends Controller
 {
+
+    public function index()
+    {
+        $portfolios = Portfolio::where('user_id', Auth::id())
+                                ->with('skills') 
+                                ->latest()
+                                ->paginate(10); 
+        return view('portfolio.index', compact('portfolios'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -38,9 +48,23 @@ class PortfolioController extends Controller
         return redirect()->route('profile')->with('success', 'Portfolio added successfully!');
     }
 
+    public function edit(Portfolio $portfolio)
+    {
+        if ($portfolio->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak diizinkan untuk mengedit portfolio ini.');
+        }
+
+        dd($portfolio);
+
+        $skills = Skill::orderBy('name')->get();
+        $portfolioSkills = $portfolio->skills->pluck('id')->toArray();
+
+        return view('portfolio.edit', compact('portfolio', 'skills', 'portfolioSkills'));
+    }
+
+
     public function update(Request $request, Portfolio $portfolio)
     {
-        // Check if user owns the portfolio
         if ($portfolio->user_id !== Auth::id()) {
             abort(403);
         }

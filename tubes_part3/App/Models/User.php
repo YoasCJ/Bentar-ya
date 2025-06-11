@@ -53,4 +53,9 @@ class User extends Authenticatable
     {
         return $this->schedulesAsUser1()->union($this->schedulesAsUser2());
     }
+
+    public function getIsAdminAttribute()
+    {
+        return $this->attributes['role'] === 'admin';
+    }
 }

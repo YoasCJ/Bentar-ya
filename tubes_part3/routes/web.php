@@ -32,6 +32,17 @@ Route::post('/register', [AuthController::class, 'register']);
 // Rute untuk logout (harus POST dan dilindungi oleh middleware 'auth')
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
+Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy')->middleware('auth');
+
+// Route untuk menampilkan form edit jadwal (jika bukan modal murni)
+Route::get('/schedule/{schedule}/edit', [ScheduleController::class, 'edit'])->name('schedule.edit')->middleware('auth');
+
+// Route untuk update jadwal (metode PUT/PATCH)
+Route::put('/schedule/{schedule}', [ScheduleController::class, 'update'])->name('schedule.update')->middleware('auth');
+
+// Route untuk delete jadwal
+Route::delete('/schedule/{schedule}', [ScheduleController::class, 'destroy'])->name('schedule.destroy')->middleware('auth');
+
 // Protected routes
 Route::middleware('auth')->group(function () {
     // Dashboard
@@ -53,8 +64,10 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     
     // Portfolio
+    Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio.index');
     Route::get('/portfolio/create', [PortfolioController::class, 'create'])->name('portfolio.create');
     Route::post('/portfolio', [PortfolioController::class, 'store'])->name('portfolio.store');
+    Route::get('/portfolio/{portfolio}/edit', [PortfolioController::class, 'edit'])->name('portfolio.edit');
     Route::put('/portfolio/{portfolio}', [PortfolioController::class, 'update'])->name('portfolio.update');
     Route::delete('/portfolio/{portfolio}', [PortfolioController::class, 'destroy'])->name('portfolio.destroy');
 });     
@@ -64,7 +77,7 @@ Route::get('/admin/dashboard', function () {
     return view('admin.dashboard'); // Membuka file tampilan yang baru saja kita buat
 })->middleware('role:admin')->name('admin.dashboard');
 
-Route::middleware('role:admin')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
     // manajemen user
@@ -72,8 +85,10 @@ Route::middleware('role:admin')->group(function () {
     Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
 
     // manajemen posts
-    Route::get('/posts', [AdminController::class, 'posts'])->name('admin.posts.index');
-    Route::delete('/posts/{post}', [AdminController::class, 'destroyPost'])->name('admin.posts.destroy');
+    // Route::get('/posts', [AdminController::class, 'posts'])->name('admin.posts.index');
+    // Route::delete('/posts/{post}', [AdminController::class, 'destroyPost'])->name('admin.posts.destroy');
+    Route::get('/posts', [AdminController::class, 'posts'])->name('posts.index');
+    Route::delete('/posts/{post}', [AdminController::class, 'destroyPost'])->name('posts.destroy');
 
     // manajemen portfolio
     Route::get('/portfolios', [AdminController::class, 'portfolios'])->name('admin.portfolios.index');
@@ -83,4 +98,7 @@ Route::middleware('role:admin')->group(function () {
     Route::get('/warnings', [AdminController::class, 'warnings'])->name('admin.warnings.index');
     Route::get('/warnings/create', [AdminController::class, 'createWarningForm'])->name('admin.warnings.create');
     Route::post('/warnings/store',[AdminController::class, 'storeWarning'])->name('admin.warnings.store');
+    Route::get('/warnings/{warning}/edit', [AdminController::class, 'editWarning'])->name('admin.warnings.edit');
+    Route::put('/warnings/{warning}', [AdminController::class, 'updateWarning'])->name('admin.warnings.update');
+    Route::delete('/warnings/{warning}', [AdminController::class, 'destroyWarning'])->name('admin.  warnings.destroy');
 });

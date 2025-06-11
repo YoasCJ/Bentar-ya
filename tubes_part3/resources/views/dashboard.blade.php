@@ -80,7 +80,6 @@
                     <i class="fas fa-calendar mr-1"></i>
                     Deadline: {{ $post->deadline->format('M d, Y') }}
                 </span>
-                {{-- MODIFIKASI DIMULAI DI SINI --}}
                 @if($post->user_id != auth()->id()) {{-- Hanya tampilkan tombol kontak jika bukan post sendiri --}}
                     {{-- Tombol Contact/Offer Help akan jadi link Email --}}
                     <a href="mailto:{{ $post->user->email }}" 

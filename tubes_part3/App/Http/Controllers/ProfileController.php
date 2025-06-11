@@ -5,19 +5,34 @@ namespace App\Http\Controllers;
 use App\Models\Portfolio;
 use App\Models\Skill;
 use App\Models\User;
+use App\Models\Warning;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-    public function show(User $user = null)
+    public function show(?User $user = null)
     {
-        $user = $user ?? Auth::user();
-        $portfolios = $user->portfolios()->with('skills')->get();
-        $skills = Skill::all();
-        
-        return view('profile', compact('user', 'portfolios', 'skills'));
+        $targetUser = $user ?? Auth::user(); 
+
+        if (!$targetUser) {
+            return redirect()->route('login')->with('error', 'Anda harus login untuk melihat profil.');
+        }
+
+        $warnings = Warning::where('user_id', $targetUser->id)
+                            ->with('admin')
+                            ->latest()
+                            ->get();
+
+        $portfolios = Portfolio::where('user_id', $targetUser->id)
+                                ->with('skills') 
+                                ->latest()
+                                ->get();
+
+        $skills = Skill::orderBy('name')->get(); 
+
+        return view('profile', compact('targetUser', 'warnings', 'portfolios', 'skills')); 
     }
 
     public function update(Request $request)

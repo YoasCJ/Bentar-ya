@@ -37,7 +37,6 @@ class PostController extends Controller
 
     public function update(Request $request, Post $post)
     {
-        // Check if user owns the post
         if ($post->user_id !== Auth::id()) {
             abort(403);
         }
@@ -67,13 +66,20 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
-        // Check if user owns the post
-        if ($post->user_id !== Auth::id()) {
-            abort(403);
+        if (Auth::id() !== $post->user_id && !(Auth::check() && Auth::user()->is_admin)) {
+            return back()->with('error', 'Anda tidak memiliki izin untuk menghapus postingan ini.');
         }
 
-        $post->delete();
-
-        return redirect()->route('dashboard')->with('success', 'Post deleted successfully!');
+        try {
+            $post->delete();
+            if (Auth::check() && Auth::user()->is_admin) {
+                return redirect()->route('admin.posts.index')->with('success', 'Postingan berhasil dihapus oleh Admin.');
+            } else {
+                return redirect()->route('dashboard')->with('success', 'Postingan Anda berhasil dihapus.');
+            }
+        } catch (\Exception $e) {
+            Log::error('Error deleting post: ' . $e->getMessage(), ['post_id' => $post->id, 'user_id' => Auth::id()]);
+            return back()->with('error', 'Gagal menghapus postingan: ' . $e->getMessage());
+        }
     }
 }

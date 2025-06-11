@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Post;      
 use App\Models\Portfolio; 
 use App\Models\Warning;
+use App\Http\Controllers\PostController;
 use Exception;
 
 class AdminController extends Controller
@@ -61,37 +62,35 @@ class AdminController extends Controller
 
     public function posts()
     {
-        $posts = Post::with('user')->latest()->paginate(20);
-        return view('admin.posts.index', compact('posts'));
+        try {
+            $posts = Post::with('user')->latest()->paginate(20);
+            return view('admin.posts.index', compact('posts'));
+        } catch (\Exception $e) {
+             \Log::error('Error fetching posts: ' . $e->getMessage());
+             return back()->with('error', 'Gagal memuat daftar postingan: ' . $e->getMessage());
+        }
     }
 
     public function destroyPost(Post $post)
     {
-        try {
-            $post->delete();
-            return redirect()->route('admin.posts.index')->with('success', 'Postingan berhasil dihapus.');
-        } catch (\Exception $e) {
-            $post->delete(); // Hapus postingan dari database
-            return redirect()->route('admin.posts.index')->with('success', 'Postingan berhasil dihapus.');
-        } catch (\Exception $e) {
-            \Log::error('Error deleting post: ' . $e->getMessage(), ['post_id' => $post->id]);
-            return back()->with('error', 'Gagal menghapus postingan: ' . $e->getMessage());
-        }
+        return (new PostController())->destroy($post);
     }
 
     public function portfolios()
     {
-        $portfolios = Portfolio::with('portfolio')->latest()->paginate(20);
-        return view('admin.portfolios.index', compact('portfolios'));
+        try {
+            $portfolios = Portfolio::with('user')->latest()->paginate(20);
+            return view('admin.portfolios.index', compact('portfolios'));
+        } catch (\Exception $e) {
+            \Log::error('Error fetching portfolios: ' . $e->getMessage());
+            return back()->with('error', 'Gagal memuat daftar portfolio: ' . $e->getMessage());
+        }
     }
 
     public function destroyPortfolio(Portfolio $portfolio)
     {
         try {
             $portfolio->delete();
-            return redirect()->route('admin.portfolios.index')->with('success', 'Portfolio berhasil dihapus.');
-        } catch (\Exception $e) {
-            $portfolio->delete(); // Hapus portfolio dari database
             return redirect()->route('admin.portfolios.index')->with('success', 'Portfolio berhasil dihapus.');
         } catch (\Exception $e) {
             \Log::error('Error deleting portfolio: ' . $e->getMessage(), ['portfolio_id' => $portfolio->id]);
@@ -102,16 +101,15 @@ class AdminController extends Controller
     public function warnings()
     {
         $warnings = Warning::with(['user', 'admin'])->latest()->paginate(20); 
-        $warnings = Warning::with('warning')->latest()->paginate(20);
         return view('admin.warnings.index', compact('warnings'));
     }
 
     public function createWarningForm()
     {
         $users = User::orderBy('name')->get();
-        return view('admin.warnings.create', compact('users'));
+        return view('admin.warnings.create', compact('users')); 
     }
-  
+    
     public function storeWarning(Request $request)
     {
         try {
@@ -125,7 +123,7 @@ class AdminController extends Controller
                 'user_id.required' => 'Pilih pengguna yang akan diberi peringatan.',
                 'user_id.exists' => 'Pengguna yang dipilih tidak valid.',
                 'warning_type.required' => 'Tipe peringatan harus dipilih.',
-                'warning_type.in' => 'Tipe peringatan yang dip  ilih tidak valid.',
+                'warning_type.in' => 'Tipe peringatan yang dipilih tidak valid.', 
                 'subject.required' => 'Subjek/Judul peringatan harus diisi.',
                 'subject.string' => 'Subjek/Judul harus berupa teks.',
                 'subject.max' => 'Subjek/Judul peringatan tidak boleh lebih dari :max karakter.',
@@ -160,4 +158,66 @@ class AdminController extends Controller
         }
     }
 
+    public function editWarning(Warning $warning)
+    {
+        // Ambil semua user untuk dropdown "Pilih Pengguna"
+        $users = User::orderBy('name')->get();
+        return view('admin.warnings.edit', compact('warning', 'users'));
+    }
+
+    public function updateWarning(Request $request, Warning $warning)
+    {
+        try {
+            $request->validate([
+                'user_id' => 'required|exists:users,id', 
+                'warning_type' => 'required|string|in:Tindakan Akun (Blokir/Suspend),Pelanggaran Aturan,Pengumuman Penting,Lain-lain',
+                'subject' => 'required|string|max:255',
+                'message' => 'required|string', 
+                'expires_at' => 'nullable|date|after_or_equal:today', 
+                'status' => 'required|string|in:active,resolved,expired,pending', 
+            ], [
+                'user_id.required' => 'Pilih pengguna yang akan diberi peringatan.',
+                'user_id.exists' => 'Pengguna yang dipilih tidak valid.',
+                'warning_type.required' => 'Tipe peringatan harus dipilih.',
+                'warning_type.in' => 'Tipe peringatan yang dipilih tidak valid.',
+                'subject.required' => 'Subjek/Judul peringatan harus diisi.',
+                'subject.string' => 'Subjek/Judul harus berupa teks.',
+                'subject.max' => 'Subjek/Judul peringatan tidak boleh lebih dari :max karakter.',
+                'message.required' => 'Pesan peringatan harus diisi.',
+                'message.string' => 'Pesan harus berupa teks.',
+                'expires_at.date' => 'Format tanggal kadaluarsa tidak valid.',
+                'expires_at.after_or_equal' => 'Tanggal kadaluarsa tidak boleh sebelum hari ini.',
+                'status.required' => 'Status peringatan harus dipilih.',
+                'status.in' => 'Status peringatan yang dipilih tidak valid.',
+            ]);
+
+            $warning->user_id = $request->input('user_id');
+            $warning->title = $request->input('subject');
+            $warning->description = $request->input('message');
+            $warning->level = $request->input('warning_type');
+            $warning->expires_at = $request->input('expires_at');
+            $warning->status = $request->input('status'); 
+
+            $warning->save();
+
+            return redirect()->route('admin.warnings.index')->with('success', 'Peringatan berhasil diperbarui!');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Error updating warning: ' . $e->getMessage(), ['warning_id' => $warning->id]);
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui peringatan: ' . $e->getMessage());
+        }
+    }
+
+    public function destroyWarning(Warning $warning)
+    {
+        try {
+            $warning->delete();
+            return redirect()->route('admin.warnings.index')->with('success', 'Peringatan berhasil dihapus.');
+        } catch (\Exception $e) {
+            \Log::error('Error deleting warning: ' . $e->getMessage(), ['warning_id' => $warning->id]);
+            return back()->with('error', 'Gagal menghapus peringatan: ' . $e->getMessage());
+        }
+    }
 }
