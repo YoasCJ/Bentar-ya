@@ -1,4 +1,8 @@
 <?php
+use App\Models\User; 
+use App\Models\Post; 
+use App\Models\Portfolio;
+use App\Http\Controllers\AuthController;
 
 use App\Http\Controllers\Api\AuthApiController;
 use App\Http\Controllers\AdminController;
@@ -52,6 +56,50 @@ Route::middleware('auth')->group(function () {
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard'); // Membuka file tampilan yang baru saja kita buat
 })->middleware('role:admin')->name('admin.dashboard');
+
+Route::middleware(['role:admin'])->prefix('admin')->group(function () {
+
+    // --- Modifikasi Rute Dashboard Admin di Sini ---
+    Route::get('/dashboard', function () {
+        // Mengambil statistik
+        $totalUsers = User::count();
+        $totalOpenPosts = Post::where('type', 'open')->count();
+        $totalNeedHelpPosts = Post::where('type', 'need')->count();
+        $totalPortfolioItems = Portfolio::count();
+
+        // Mengambil aktivitas terbaru (misalnya 3 item terakhir)
+        $latestPosts = Post::orderBy('created_at', 'desc')->take(3)->get();
+        $latestUsers = User::orderBy('created_at', 'desc')->take(3)->get();
+        $latestPortfolios = Portfolio::orderBy('created_at', 'desc')->take(3)->get();
+
+        return view('admin.dashboard', compact(
+            'totalUsers',
+            'totalOpenPosts',
+            'totalNeedHelpPosts',
+            'totalPortfolioItems',
+            'latestPosts',
+            'latestUsers',
+            'latestPortfolios'
+        ));
+    })->name('admin.dashboard');
+
+    // ... (rute-rute manajemen lainnya: admin.users, admin.posts, admin.skills) ...
+    Route::get('/users', function () {
+        $users = User::all();
+        return view('admin.users', compact('users'));
+    })->name('admin.users');
+
+    Route::get('/posts', function () {
+        $posts = Post::all();
+        return view('admin.posts', compact('posts'));
+    })->name('admin.posts');
+
+    Route::get('/skills', function () {
+        $skills = \App\Models\Skill::all(); // Perbaiki namespace ini jika perlu: App\Models\Skill
+        return view('admin.skills', compact('skills'));
+    })->name('admin.skills');
+
+});
 Route::middleware('role:admin')->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index']);
 });

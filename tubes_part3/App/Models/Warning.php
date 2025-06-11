@@ -11,6 +11,15 @@ class Warning extends Model
 
     // Field yang bisa diisi secara massal
     protected $fillable = [
+        'user_id', 
+        'title',
+        'description',
+        'level',
+        'expires_at',
+        'admin_id', 
+        'status',
+    ];
+
         'user_id',
         'admin_id',
         'warning_type',
@@ -20,20 +29,24 @@ class Warning extends Model
         'expires_at',
     ];
 
-    // Cast kolom expires_at menjadi tipe datetime
     protected $casts = [
         'expires_at' => 'datetime',
     ];
 
-    // Relasi dengan User yang diperingatkan
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
+
+    public function admin()
+    {
+        return $this->belongsTo(User::class, 'admin_id');
+
     // Relasi dengan Admin yang mengeluarkan peringatan
     public function admin()
     {
         return $this->belongsTo(User::class, 'admin_id'); // Asumsi admin juga menggunakan model User
+
     }
 }

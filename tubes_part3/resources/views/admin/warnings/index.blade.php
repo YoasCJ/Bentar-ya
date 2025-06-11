@@ -64,22 +64,27 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $warning->id }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $warning->user->name ?? 'N/A' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $warning->admin->name ?? 'N/A' }}</td>
+
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $warning->level ?? 'N/A' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ Str::limit($warning->title ?? '', 40) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ ucfirst($warning->status ?? 'N/A') }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $warning->created_at->format('d M Y H:i') ?? 'N/A' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $warning->warning_type }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ Str::limit($warning->subject, 40) }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ ucfirst($warning->status) }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $warning->created_at->format('d M Y H:i') }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            {{-- Link Lihat Detail Peringatan --}}
+
                             @if (Route::has('admin.warnings.show'))
                                 <a href="{{ route('admin.warnings.show', $warning->id) }}" class="text-blue-600 hover:text-blue-900 mr-2">Lihat</a>
                             @endif
 
-                            {{-- Link Edit Peringatan --}}
                             @if (Route::has('admin.warnings.edit'))
                                 <a href="{{ route('admin.warnings.edit', $warning->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-2">Edit</a>
                             @endif
 
-                            {{-- Form Hapus Peringatan --}}
                             @if (Route::has('admin.warnings.destroy'))
                                 <form action="{{ route('admin.warnings.destroy', $warning->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus peringatan ini? Aksi ini tidak dapat dibatalkan!');">
                                     @csrf
