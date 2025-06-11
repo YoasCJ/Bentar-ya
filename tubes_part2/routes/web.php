@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Api\AuthApiController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PostController;
@@ -15,11 +15,11 @@ Route::get('/', function () {
 })->name('home');
 
 // Authentication routes
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/register', [AuthApiController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthApiController::class, 'register']);
+Route::get('/login', [AuthApiController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthApiController::class, 'login']);
+Route::post('/logout', [AuthApiController::class, 'logout'])->name('logout');
 
 // Protected routes
 Route::middleware('auth')->group(function () {
@@ -49,11 +49,17 @@ Route::middleware('auth')->group(function () {
 });     
 
 // Rute khusus untuk Dashboard Admin
+<<<<<<< HEAD
 
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard'); // Membuka file tampilan yang baru saja kita buat
 })->middleware('role:admin')->name('admin.dashboard');
 
+=======
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard'); // Membuka file tampilan yang baru saja kita buat
+})->middleware('role:admin')->name('admin.dashboard');
+>>>>>>> cb2d9ef3042a64167651180b88138f2073c9c46d
 Route::middleware('role:admin')->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index']);
 });
