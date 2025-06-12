@@ -6916,3 +6916,5 @@ Did you mean one of these?
 #21 C:\\xampp\\htdocs\\Bentar-ya\\tubes_part3\\artisan(16): Illuminate\\Foundation\\Application->handleCommand(Object(Symfony\\Component\\Console\\Input\\ArgvInput))
 #22 {main}
 "} 
+[2025-06-12 14:36:09] local.ERROR: Validation error in updateWarning: {"status":["Status peringatan yang dipilih tidak valid."]}  
+[2025-06-12 14:36:23] local.ERROR: Validation error in updateWarning: {"status":["Status peringatan yang dipilih tidak valid."]}  

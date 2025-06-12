@@ -85,10 +85,11 @@
             <div class="mb-4">
                 <label for="status" class="block text-gray-700 text-sm font-bold mb-2">Status:</label>
                 <select name="status" id="status" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('status') border-red-500 @enderror" required>
-                    <option value="active" {{ old('status', $warning->status) == 'active' ? 'selected' : '' }}>Active</option>
-                    <option value="resolved" {{ old('status', $warning->status) == 'resolved' ? 'selected' : '' }}>Resolved</option>
-                    <option value="expired" {{ old('status', $warning->status) == 'expired' ? 'selected' : '' }}>Expired</option>
-                    <option value="pending" {{ old('status', $warning->status) == 'pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="sent" {{ old('status', $warning->status) == 'sent' ? 'selected' : '' }}>Terkirim</option>
+                    <option value="read" {{ old('status', $warning->status) == 'read' ? 'selected' : '' }}>Dibaca</option>
+                    <option value="resolved" {{ old('status', $warning->status) == 'resolved' ? 'selected' : '' }}>Selesai</option>
+                    <option value="pending_action" {{ old('status', $warning->status) == 'pending_action' ? 'selected' : '' }}>Menunggu Tindakan</option>
+
                 </select>
                 @error('status')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
