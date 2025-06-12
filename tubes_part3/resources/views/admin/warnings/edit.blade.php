@@ -48,10 +48,10 @@
                 <label for="warning_type" class="block text-gray-700 text-sm font-bold mb-2">Tipe Peringatan:</label>
                 <select name="warning_type" id="warning_type" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('warning_type') border-red-500 @enderror" required>
                     <option value="">-- Pilih Tipe --</option>
-                    <option value="Pelanggaran Aturan" {{ old('warning_type', $warning->level) == 'Pelanggaran Aturan' ? 'selected' : '' }}>Pelanggaran Aturan</option>
-                    <option value="Tindakan Akun (Blokir/Suspend)" {{ old('warning_type', $warning->level) == 'Tindakan Akun (Blokir/Suspend)' ? 'selected' : '' }}>Tindakan Akun (Blokir/Suspend)</option>
-                    <option value="Pengumuman Penting" {{ old('warning_type', $warning->level) == 'Pengumuman Penting' ? 'selected' : '' }}>Pengumuman Penting</option>
-                    <option value="Lain-lain" {{ old('warning_type', $warning->level) == 'Lain-lain' ? 'selected' : '' }}>Lain-lain</option>
+                    <option value="Pelanggaran Aturan" {{ old('warning_type', $warning->warning_type) == 'Pelanggaran Aturan' ? 'selected' : '' }}>Pelanggaran Aturan</option>
+                    <option value="Tindakan Akun (Blokir/Suspend)" {{ old('warning_type', $warning->warning_type) == 'Tindakan Akun (Blokir/Suspend)' ? 'selected' : '' }}>Tindakan Akun (Blokir/Suspend)</option>
+                    <option value="Pengumuman Penting" {{ old('warning_type', $warning->warning_type) == 'Pengumuman Penting' ? 'selected' : '' }}>Pengumuman Penting</option>
+                    <option value="Lain-lain" {{ old('warning_type', $warning->warning_type) == 'Lain-lain' ? 'selected' : '' }}>Lain-lain</option>
                 </select>
                 @error('warning_type')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
@@ -60,7 +60,7 @@
 
             <div class="mb-4">
                 <label for="subject" class="block text-gray-700 text-sm font-bold mb-2">Subjek/Judul:</label>
-                <input type="text" name="subject" id="subject" value="{{ old('subject', $warning->title) }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('subject') border-red-500 @enderror" placeholder="Subjek peringatan (misal: Pelanggaran Spam)" required>
+                <input type="text" name="subject" id="subject" value="{{ old('subject', $warning->subject) }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('subject') border-red-500 @enderror" placeholder="Subjek peringatan (misal: Pelanggaran Spam)" required>
                 @error('subject')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
                 @enderror
@@ -68,7 +68,7 @@
 
             <div class="mb-4">
                 <label for="message" class="block text-gray-700 text-sm font-bold mb-2">Pesan:</label>
-                <textarea name="message" id="message" rows="5" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('message') border-red-500 @enderror" placeholder="Isi pesan peringatan lengkap" required>{{ old('message', $warning->description) }}</textarea>
+                <textarea name="message" id="message" rows="5" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('message') border-red-500 @enderror" placeholder="Isi pesan peringatan lengkap" required>{{ old('message', $warning->message) }}</textarea>
                 @error('message')
                     <p class="text-red-500 text-xs italic">{{ $message }}</p>
                 @enderror
