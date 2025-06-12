@@ -53,10 +53,13 @@ Route::middleware('auth')->group(function () {
 });     
 
 // Rute khusus untuk Dashboard Admin
+<<<<<<< HEAD
+
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard'); // Membuka file tampilan yang baru saja kita buat
 })->middleware('role:admin')->name('admin.dashboard');
 
+<<<<<<< HEAD
 Route::middleware(['role:admin'])->prefix('admin')->group(function () {
 
     // --- Modifikasi Rute Dashboard Admin di Sini ---
@@ -100,6 +103,13 @@ Route::middleware(['role:admin'])->prefix('admin')->group(function () {
     })->name('admin.skills');
 
 });
+=======
+=======
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard'); // Membuka file tampilan yang baru saja kita buat
+})->middleware('role:admin')->name('admin.dashboard');
+>>>>>>> cb2d9ef3042a64167651180b88138f2073c9c46d
+>>>>>>> 9182b37fb875c586f0918986d4e231add3a4d7b1
 Route::middleware('role:admin')->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index']);
 });
@@ -117,4 +127,5 @@ Route::middleware(['role:admin'])->prefix('admin')->group(function () {
 
     // Rute untuk Manajemen Skill
     Route::get('/skills', [AdminController::class, 'skills'])->name('admin.skills');
+
 });
