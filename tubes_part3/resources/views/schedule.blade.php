@@ -284,11 +284,11 @@
     
     // Edit schedule
     function editSchedule(scheduleId) {
-        fetch(`/api/schedules/${scheduleId}`, { // Panggil API untuk mendapatkan data
+        fetch(`/api/schedules/${scheduleId}`, { // Ini request AJAX-nya
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
                 // 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Tidak perlu untuk GET request API dengan middleware 'web'
             }
         })

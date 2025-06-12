@@ -1,40 +1,50 @@
 <?php
 
-namespace App\Http\Controllers; 
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use App\Models\User;      
-use App\Models\Post;      
-use App\Models\Portfolio; 
+use App\Models\User;
+use App\Models\Post;
+use App\Models\Portfolio;
 use App\Models\Warning;
 use App\Http\Controllers\PostController;
 use Exception;
+use Illuminate\Validation\Rule; // <-- Pastikan ini di-import untuk Rule::in()
 
 class AdminController extends Controller
 {
     public function index()
     {
-        // Mengambil statistik
+        // 1. Ambil data statistik ringkas
         $totalUsers = User::count();
-        $totalOpenPosts = Post::where('type', 'open')->count();
-        $totalNeedHelpPosts = Post::where('type', 'need')->count();
+        // Pastikan kolom 'status' dan 'type' ada di tabel 'posts' atau sesuaikan query
+        $totalOpenPosts = Post::where('status', 'open')->count();
+        $totalNeedHelpPosts = Post::where('type', 'need_help')->count();
         $totalPortfolioItems = Portfolio::count();
+        $totalWarnings = Warning::count();
+        // Pastikan kolom 'status' ada di tabel 'warnings' atau sesuaikan query
+        $pendingWarnings = Warning::where('status', 'pending_action')->count(); // Lebih spesifik ke 'pending_action' sesuai enum
 
-        $latestPosts = Post::orderBy('created_at', 'desc')->take(3)->get();
-        $latestUsers = User::orderBy('created_at', 'desc')->take(3)->get();
-        $latestPortfolios = Portfolio::orderBy('created_at', 'desc')->take(3)->get();
+        $latestPosts = Post::with('user')->latest()->take(5)->get();
+        $latestUsers = User::latest()->take(5)->get();
+        $latestPortfolios = Portfolio::with('user')->latest()->take(5)->get();
+        $latestWarnings = Warning::with('user')->latest()->take(5)->get();
 
+        // 3. Lewatkan semua variabel ke view
         return view('admin.dashboard', compact(
             'totalUsers',
             'totalOpenPosts',
             'totalNeedHelpPosts',
             'totalPortfolioItems',
+            'totalWarnings',
+            'pendingWarnings',
             'latestPosts',
             'latestUsers',
-            'latestPortfolios'
+            'latestPortfolios',
+            'latestWarnings'
         ));
     }
 
@@ -51,10 +61,9 @@ class AdminController extends Controller
         }
 
         try {
-            $user->delete(); // Hapus user dari database
+            $user->delete();
             return redirect()->route('admin.users.index')->with('success', 'Pengguna berhasil dihapus.');
         } catch (\Exception $e) {
-            // Tangani error jika terjadi masalah saat menghapus
             \Log::error('Error deleting user: ' . $e->getMessage(), ['user_id' => $user->id]);
             return back()->with('error', 'Gagal menghapus pengguna: ' . $e->getMessage());
         }
@@ -66,8 +75,8 @@ class AdminController extends Controller
             $posts = Post::with('user')->latest()->paginate(20);
             return view('admin.posts.index', compact('posts'));
         } catch (\Exception $e) {
-             \Log::error('Error fetching posts: ' . $e->getMessage());
-             return back()->with('error', 'Gagal memuat daftar postingan: ' . $e->getMessage());
+            \Log::error('Error fetching posts: ' . $e->getMessage());
+            return back()->with('error', 'Gagal memuat daftar postingan: ' . $e->getMessage());
         }
     }
 
@@ -100,30 +109,37 @@ class AdminController extends Controller
 
     public function warnings()
     {
-        $warnings = Warning::with(['user', 'admin'])->latest()->paginate(20); 
+        $warnings = Warning::with(['user', 'admin'])->latest()->paginate(20);
         return view('admin.warnings.index', compact('warnings'));
     }
 
     public function createWarningForm()
     {
         $users = User::orderBy('name')->get();
-        return view('admin.warnings.create', compact('users')); 
+        return view('admin.warnings.create', compact('users'));
     }
-    
+
     public function storeWarning(Request $request)
     {
         try {
             $request->validate([
-                'user_id' => 'required|exists:users,id', 
-                'warning_type' => 'required|string|in:Tindakan Akun (Blokir/Suspend),Pelanggaran Aturan,Pengumuman Penting,Lain-lain',
+                'user_id' => 'required|exists:users,id',
+                'warning_type' => [ // <-- Menggunakan array untuk Rule::in
+                    'required',
+                    'string',
+                    Rule::in(['Tindakan Akun (Blokir/Suspend)', 'Pelanggaran Aturan', 'Pengumuman Penting', 'Lain-lain']),
+                ],
                 'subject' => 'required|string|max:255',
-                'message' => 'required|string', 
-                'expires_at' => 'nullable|date|after_or_equal:today', 
+                'message' => 'required|string',
+                'expires_at' => 'nullable|date|after_or_equal:today',
+                // 'level' tidak ada di form? Jika ada, tambahkan validasi di sini.
+                // Jika tidak ada di form, dan kolomnya NOT NULL, Anda akan butuh default di DB atau set di controller.
+                // 'status' tidak ada di form? Jika ada, tambahkan validasi. Kalau tidak, set default di controller.
             ], [
                 'user_id.required' => 'Pilih pengguna yang akan diberi peringatan.',
                 'user_id.exists' => 'Pengguna yang dipilih tidak valid.',
                 'warning_type.required' => 'Tipe peringatan harus dipilih.',
-                'warning_type.in' => 'Tipe peringatan yang dipilih tidak valid.', 
+                'warning_type.in' => 'Tipe peringatan yang dipilih tidak valid.',
                 'subject.required' => 'Subjek/Judul peringatan harus diisi.',
                 'subject.string' => 'Subjek/Judul harus berupa teks.',
                 'subject.max' => 'Subjek/Judul peringatan tidak boleh lebih dari :max karakter.',
@@ -135,32 +151,61 @@ class AdminController extends Controller
 
             $warning = new Warning();
             $warning->user_id = $request->input('user_id');
-            $warning->title = $request->input('subject');
-            $warning->description = $request->input('message'); 
-            $warning->level = $request->input('warning_type'); 
-            $warning->expires_at = $request->input('expires_at'); 
+            $warning->subject = $request->input('subject');
+            $warning->message = $request->input('message');
+
+            // --- PERBAIKAN KRUSIAL DI SINI ---
+            $warning->warning_type = $request->input('warning_type'); // <-- INI YANG BENAR!
+            // Jika Anda memiliki kolom 'level' di DB dan itu harus diisi:
+            // Anda perlu input untuk 'level' di form, atau set default/derive di sini.
+            // Saat ini, tidak ada input 'level' di form, dan Anda mencoba mengisi 'level' dengan warning_type.
+            // Jika 'level' tidak penting untuk saat ini atau bisa NULL, pastikan migrasi 'level' adalah ->nullable().
+            // Jika Anda ingin level berdasarkan warning_type, tambahkan logika mapping di sini.
+            // Contoh (jika Anda ingin level diisi secara otomatis):
+            // $warning->level = $this->mapWarningTypeToLevel($request->input('warning_type'));
+            // Untuk sementara, jika Anda tidak punya input level, Anda bisa set default atau pastikan nullable di DB.
+            // Jika level harus diisi, Anda harus tambahkan ke form.
+            // Untuk saat ini, saya akan HAPUS assignment level yang salah.
+            // $warning->level = $request->input('warning_type'); // HAPUS BARIS INI KARENA SALAH
+
+            $warning->expires_at = $request->input('expires_at');
 
             if (Auth::check()) {
-                $warning->admin_id = Auth::id(); 
+                $warning->admin_id = Auth::id();
             } else {
-                $warning->admin_id = null; 
+                $warning->admin_id = null; // Pastikan kolom admin_id boleh nullable di DB jika ini bisa null
             }
-            $warning->status = 'active'; 
+            // --- PERBAIKAN STATUS ---
+            // Ganti 'active' dengan salah satu nilai dari enum di migrasi: ['sent', 'read', 'resolved', 'pending_action']
+            $warning->status = 'sent'; // <-- Ini nilai default yang lebih masuk akal untuk peringatan baru
 
             $warning->save();
 
-            return redirect()->route('admin.warnings.index')->with('success', 'Peringatan berhasil disimpan!'); 
+            return redirect()->route('admin.warnings.index')->with('success', 'Peringatan berhasil disimpan!');
 
         } catch (\Illuminate\Validation\ValidationException $e) {
+            // Debugging: Log error validasi
+            \Log::error('Validation error in storeWarning: ' . json_encode($e->errors()));
             return redirect()->back()->withErrors($e->errors())->withInput();
-        } catch (\Exception $e) { 
+        } catch (\Exception $e) {
+            // Debugging: Log error umum
+            \Log::error('General error in storeWarning: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan peringatan: ' . $e->getMessage());
         }
     }
 
+    // Helper method (opsional, jika Anda ingin memetakan warning_type ke level)
+    // private function mapWarningTypeToLevel(string $warningType): string
+    // {
+    //     return match ($warningType) {
+    //         'Pelanggaran Aturan', 'Tindakan Akun (Blokir/Suspend)' => 'High',
+    //         'Pengumuman Penting' => 'Medium',
+    //         default => 'Low',
+    //     };
+    // }
+
     public function editWarning(Warning $warning)
     {
-        // Ambil semua user untuk dropdown "Pilih Pengguna"
         $users = User::orderBy('name')->get();
         return view('admin.warnings.edit', compact('warning', 'users'));
     }
@@ -169,12 +214,17 @@ class AdminController extends Controller
     {
         try {
             $request->validate([
-                'user_id' => 'required|exists:users,id', 
-                'warning_type' => 'required|string|in:Tindakan Akun (Blokir/Suspend),Pelanggaran Aturan,Pengumuman Penting,Lain-lain',
+                'user_id' => 'required|exists:users,id',
+                'warning_type' => [
+                    'required',
+                    'string',
+                    Rule::in(['Tindakan Akun (Blokir/Suspend)', 'Pelanggaran Aturan', 'Pengumuman Penting', 'Lain-lain']),
+                ],
                 'subject' => 'required|string|max:255',
-                'message' => 'required|string', 
-                'expires_at' => 'nullable|date|after_or_equal:today', 
-                'status' => 'required|string|in:active,resolved,expired,pending', 
+                'message' => 'required|string',
+                'expires_at' => 'nullable|date|after_or_equal:today',
+                'status' => ['required', 'string', Rule::in(['sent', 'read', 'resolved', 'pending_action'])], // Menggunakan Rule::in
+                // 'level' => 'required|string|in:Low,Medium,High,Critical',
             ], [
                 'user_id.required' => 'Pilih pengguna yang akan diberi peringatan.',
                 'user_id.exists' => 'Pengguna yang dipilih tidak valid.',
@@ -192,17 +242,19 @@ class AdminController extends Controller
             ]);
 
             $warning->user_id = $request->input('user_id');
-            $warning->title = $request->input('subject');
-            $warning->description = $request->input('message');
-            $warning->level = $request->input('warning_type');
+            $warning->subject = $request->input('subject'); // Ini yang benar!
+            $warning->message = $request->input('message');
+            $warning->warning_type = $request->input('warning_type'); // <-- PERBAIKAN DI SINI JUGA
+            // $warning->level = $request->input('level'); // Jika Anda punya input level
             $warning->expires_at = $request->input('expires_at');
-            $warning->status = $request->input('status'); 
+            $warning->status = $request->input('status');
 
             $warning->save();
 
             return redirect()->route('admin.warnings.index')->with('success', 'Peringatan berhasil diperbarui!');
 
         } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Validation error in updateWarning: ' . json_encode($e->errors()));
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             \Log::error('Error updating warning: ' . $e->getMessage(), ['warning_id' => $warning->id]);

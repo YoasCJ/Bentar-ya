@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DashboardController;
@@ -15,54 +16,43 @@ Route::get('/', function () {
 })->name('home');
 
 // Authentication routes
-// Route::get('/register', [AuthApiController::class, 'showRegister'])->name('register');
-// Route::post('/register', [AuthApiController::class, 'register']);
-// Route::get('/login', [AuthApiController::class, 'showLogin'])->name('login');
-// Route::post('/login', [AuthApiController::class, 'login']);
-// Route::post('/logout', [AuthApiController::class, 'logout'])->name('logout');
-
-// Rute untuk login
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
-// Rute untuk registrasi
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 
-// Rute untuk logout (harus POST dan dilindungi oleh middleware 'auth')
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
-Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy')->middleware('auth');
+// Hapus rute duplikat ini, karena sudah ada di dalam grup middleware('auth') di bawah.
+// Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy')->middleware('auth');
+// Route::get('/schedule/{schedule}/edit', [ScheduleController::class, 'edit'])->name('schedule.edit')->middleware('auth');
+// Route::put('/schedule/{schedule}', [ScheduleController::class, 'update'])->name('schedule.update')->middleware('auth');
+// Route::delete('/schedule/{schedule}', [ScheduleController::class, 'destroy'])->name('schedule.destroy')->middleware('auth');
 
-// Route untuk menampilkan form edit jadwal (jika bukan modal murni)
-Route::get('/schedule/{schedule}/edit', [ScheduleController::class, 'edit'])->name('schedule.edit')->middleware('auth');
 
-// Route untuk update jadwal (metode PUT/PATCH)
-Route::put('/schedule/{schedule}', [ScheduleController::class, 'update'])->name('schedule.update')->middleware('auth');
-
-// Route untuk delete jadwal
-Route::delete('/schedule/{schedule}', [ScheduleController::class, 'destroy'])->name('schedule.destroy')->middleware('auth');
-
-// Protected routes
+// Protected routes (for regular authenticated users)
 Route::middleware('auth')->group(function () {
-    // Dashboard
+    // Dashboard User Biasa
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    
+
     // Posts
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
     Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
-    
+
     // Schedule
     Route::get('/schedule', [ScheduleController::class, 'index'])->name('schedule');
     Route::post('/schedule', [ScheduleController::class, 'store'])->name('schedule.store');
     Route::put('/schedule/{schedule}', [ScheduleController::class, 'update'])->name('schedule.update');
     Route::delete('/schedule/{schedule}', [ScheduleController::class, 'destroy'])->name('schedule.destroy');
-    
+    Route::get('/schedule/{schedule}/edit', [ScheduleController::class, 'edit'])->name('schedule.edit');
+
+
     // Profile
     Route::get('/profile/{user?}', [ProfileController::class, 'show'])->name('profile');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    
+
     // Portfolio
     Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio.index');
     Route::get('/portfolio/create', [PortfolioController::class, 'create'])->name('portfolio.create');
@@ -70,35 +60,45 @@ Route::middleware('auth')->group(function () {
     Route::get('/portfolio/{portfolio}/edit', [PortfolioController::class, 'edit'])->name('portfolio.edit');
     Route::put('/portfolio/{portfolio}', [PortfolioController::class, 'update'])->name('portfolio.update');
     Route::delete('/portfolio/{portfolio}', [PortfolioController::class, 'destroy'])->name('portfolio.destroy');
-});     
+});
 
-// Rute khusus untuk Dashboard Admin
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard'); // Membuka file tampilan yang baru saja kita buat
-})->middleware('role:admin')->name('admin.dashboard');
+// ======================================================================================================
+// Rute untuk Dashboard Admin dan Manajemen Admin
+// ======================================================================================================
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
+    // Dashboard Admin
+    // URI: /admin/dashboard, Nama: admin.dashboard
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
 
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    // Manajemen User
+    // URI: /admin/users, Nama: admin.users.index
+    Route::get('/users', [AdminController::class, 'users'])->name('users.index');
+    // URI: /admin/users/{user}, Nama: admin.users.destroy
+    Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('users.destroy');
 
-    // manajemen user
-    Route::get('/users', [AdminController::class, 'users'])->name('admin.users.index');
-    Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
-
-    // manajemen posts
-    // Route::get('/posts', [AdminController::class, 'posts'])->name('admin.posts.index');
-    // Route::delete('/posts/{post}', [AdminController::class, 'destroyPost'])->name('admin.posts.destroy');
+    // Manajemen Posts (Pastikan ini rute yang benar untuk admin, bukan duplikat dengan posts user biasa)
+    // URI: /admin/posts, Nama: admin.posts.index
     Route::get('/posts', [AdminController::class, 'posts'])->name('posts.index');
+    // URI: /admin/posts/{post}, Nama: admin.posts.destroy
     Route::delete('/posts/{post}', [AdminController::class, 'destroyPost'])->name('posts.destroy');
 
-    // manajemen portfolio
-    Route::get('/portfolios', [AdminController::class, 'portfolios'])->name('admin.portfolios.index');
-    Route::delete('/portfolios/{portfolio}', [AdminController::class, 'destroyPortfolio'])->name('admin.portfolios.destroy'); 
+    // Manajemen Portfolio
+    // URI: /admin/portfolios, Nama: admin.portfolios.index
+    Route::get('/portfolios', [AdminController::class, 'portfolios'])->name('portfolios.index');
+    // URI: /admin/portfolios/{portfolio}, Nama: admin.portfolios.destroy
+    Route::delete('/portfolios/{portfolio}', [AdminController::class, 'destroyPortfolio'])->name('portfolios.destroy');
 
-    // manajemen peringatan
-    Route::get('/warnings', [AdminController::class, 'warnings'])->name('admin.warnings.index');
-    Route::get('/warnings/create', [AdminController::class, 'createWarningForm'])->name('admin.warnings.create');
-    Route::post('/warnings/store',[AdminController::class, 'storeWarning'])->name('admin.warnings.store');
-    Route::get('/warnings/{warning}/edit', [AdminController::class, 'editWarning'])->name('admin.warnings.edit');
-    Route::put('/warnings/{warning}', [AdminController::class, 'updateWarning'])->name('admin.warnings.update');
-    Route::delete('/warnings/{warning}', [AdminController::class, 'destroyWarning'])->name('admin.  warnings.destroy');
+    // Manajemen Peringatan
+    // URI: /admin/warnings, Nama: admin.warnings.index
+    Route::get('/warnings', [AdminController::class, 'warnings'])->name('warnings.index');
+    // URI: /admin/warnings/create, Nama: admin.warnings.create
+    Route::get('/warnings/create', [AdminController::class, 'createWarningForm'])->name('warnings.create');
+    // URI: /admin/warnings/store, Nama: admin.warnings.store
+    Route::post('/warnings/store', [AdminController::class, 'storeWarning'])->name('warnings.store');
+    // URI: /admin/warnings/{warning}/edit, Nama: admin.warnings.edit
+    Route::get('/warnings/{warning}/edit', [AdminController::class, 'editWarning'])->name('warnings.edit');
+    // URI: /admin/warnings/{warning}, Nama: admin.warnings.update
+    Route::put('/warnings/{warning}', [AdminController::class, 'updateWarning'])->name('warnings.update');
+    // URI: /admin/warnings/{warning}, Nama: admin.warnings.destroy
+    Route::delete('/warnings/{warning}', [AdminController::class, 'destroyWarning'])->name('warnings.destroy');
 });

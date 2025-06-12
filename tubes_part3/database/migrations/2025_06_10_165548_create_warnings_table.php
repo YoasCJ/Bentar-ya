@@ -13,20 +13,16 @@ return new class extends Migration
     {
         Schema::create('warnings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); 
-            $table->string('title');
-            $table->text('description')->nullable(); 
-            $table->string('level'); 
-            $table->timestamp('expires_at')->nullable();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            // $table->text('description')->nullable(); 
+            // $table->string('level'); 
             $table->timestamps();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // User yang diperingatkan
             $table->foreignId('admin_id')->constrained('users')->onDelete('cascade'); // Admin yang mengeluarkan peringatan (asumsi tabel admin juga 'users')
-            $table->string('warning_type'); // Tipe peringatan (e.g., 'violation', 'account_action', 'announcement')
+            $table->enum('warning_type', ['--Pilih Tipe--','Pelanggaran Aturan', 'Tindakan Akun (Blokir/Suspend)', 'Pengumuman Penting', 'Lain-lain'])->default('--Pilih Tipe--');
             $table->string('subject'); // Judul atau subjek peringatan
             $table->text('message'); // Isi pesan peringatan
             $table->enum('status', ['sent', 'read', 'resolved', 'pending_action'])->default('sent'); // Status peringatan
             $table->timestamp('expires_at')->nullable(); // Tanggal kadaluarsa (opsional)
-            $table->timestamps(); // created_at dan updated_at
 
         });
     }
