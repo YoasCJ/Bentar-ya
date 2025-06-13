@@ -42,44 +42,61 @@ class ScheduleController extends Controller
         return redirect()->route('schedule')->with('success', 'Schedule created successfully!');
     }
 
+public function json(Schedule $schedule)
+{
+    if ($schedule->user1_id !== Auth::id() && $schedule->user2_id !== Auth::id()) {
+        abort(403, 'Unauthorized');
+    }
+
+    return response()->json([
+        'id' => $schedule->id,
+        'notes' => $schedule->notes,
+        'status' => $schedule->status,
+        'method' => $schedule->method,
+        'scheduled_at' => $schedule->scheduled_at,
+    ]);
+}
+
     public function edit(Schedule $schedule)
-    {
-        // Otorisasi: Pastikan hanya pemilik jadwal yang bisa mengedit
-        if ($schedule->user_id !== Auth::id()) {
-            abort(403, 'Anda tidak diizinkan untuk mengedit jadwal ini.');
-        }
-
-        // Jika Anda perlu data user lain untuk dropdown di form edit (misal: penanggung jawab)
-        $users = User::orderBy('name')->get(); 
-
-        // Mengirim objek $schedule (berisi data lama) dan $users ke view Blade.
-        // Pastikan nama view-nya sesuai dengan file Blade Anda (misal: 'schedule.edit')
-        return view('schedule.edit', compact('schedule', 'users'));
+{
+    // Hanya user yang terlibat (user1 atau user2) yang bisa mengedit
+    if ($schedule->user1_id !== Auth::id() && $schedule->user2_id !== Auth::id()) {
+        abort(403, 'Anda tidak diizinkan untuk mengedit jadwal ini.');
     }
 
-    public function update(Request $request, Schedule $schedule)
-    {
-        // Check if user is part of the schedule
-        if ($schedule->user1_id !== Auth::id() && $schedule->user2_id !== Auth::id()) {
-            abort(403);
-        }
+    // Data user lain (opsional, bisa untuk dropdown jika kamu pakai)
+    $users = User::where('id', '!=', Auth::id())->get();
 
-        $request->validate([
-            'scheduled_at' => 'required|date|after:now',
-            'method' => 'required|in:online,offline',
-            'notes' => 'nullable|string',
-            'status' => 'required|in:upcoming,completed,cancelled',
-        ]);
+    // Kirim data ke view schedule/edit.blade.php
+    return view('edit', compact('schedule', 'users'));
+}
 
-        $schedule->update([
-            'scheduled_at' => $request->scheduled_at,
-            'method' => $request->method,
-            'notes' => $request->notes,
-            'status' => $request->status,
-        ]);
-
-        return redirect()->route('schedule')->with('success', 'Schedule updated successfully!');
+public function update(Request $request, Schedule $schedule)
+{
+    // Hanya user yang terlibat yang bisa mengubah jadwal
+    if ($schedule->user1_id !== Auth::id() && $schedule->user2_id !== Auth::id()) {
+        abort(403);
     }
+
+    // Validasi input dari form
+    $request->validate([
+        'scheduled_at' => 'required|date|after:now',
+        'method' => 'required|in:online,offline',
+        'notes' => 'nullable|string',
+        'status' => 'required|in:upcoming,completed,cancelled',
+    ]);
+
+    // Update data ke database
+    $schedule->update([
+        'scheduled_at' => $request->scheduled_at,
+        'method' => $request->method,
+        'notes' => $request->notes,
+        'status' => $request->status,
+    ]);
+
+    return redirect()->route('schedule')->with('success', 'Schedule berhasil diperbarui!');
+}
+
 
     public function destroy(Schedule $schedule)
     {

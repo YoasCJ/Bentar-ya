@@ -47,6 +47,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/schedule/{schedule}', [ScheduleController::class, 'update'])->name('schedule.update');
     Route::delete('/schedule/{schedule}', [ScheduleController::class, 'destroy'])->name('schedule.destroy');
     Route::get('/schedule/{schedule}/edit', [ScheduleController::class, 'edit'])->name('schedule.edit');
+    Route::get('/schedule/{schedule}/json', [ScheduleController::class, 'json'])->name('schedule.json');
+
 
 
     // Profile

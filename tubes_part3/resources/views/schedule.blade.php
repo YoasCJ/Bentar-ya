@@ -172,64 +172,68 @@
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-            
+
             <form id="editScheduleForm" method="POST">
                 @csrf
-                @method('PUT') {{-- Metode PUT untuk update --}}
+                @method('PUT')
 
-                <input type="hidden" name="schedule_id" id="editScheduleId"> {{-- Untuk menyimpan ID jadwal --}}
+                <input type="hidden" name="schedule_id" id="editScheduleId">
 
                 <div class="space-y-4">
                     <div>
-                        <label for="editScheduleTitle" class="block text-sm font-medium text-gray-700">Title</label>
-                        <input type="text" name="title" id="editScheduleTitle" required 
-                               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <label for="editScheduleDate" class="block text-sm font-medium text-gray-700">Date</label>
+                        <input type="date" name="scheduled_at_date" id="editScheduleDate" required class="w-full border p-2">
                     </div>
-                    
+                    <div>
+                        <label for="editScheduleTime" class="block text-sm font-medium text-gray-700">Time</label>
+                        <input type="time" name="scheduled_at_time" id="editScheduleTime" required class="w-full border p-2">
+                    </div>
                     <div>
                         <label for="editScheduleDescription" class="block text-sm font-medium text-gray-700">Notes</label>
-                        <textarea name="description" id="editScheduleDescription" rows="3" 
-                                  class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
+                        <textarea name="notes" id="editScheduleDescription" rows="3" class="w-full border p-2"></textarea>
                     </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label for="editScheduleDate" class="block text-sm font-medium text-gray-700">Date</label>
-                            <input type="date" name="date" id="editScheduleDate" required 
-                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label for="editScheduleTime" class="block text-sm font-medium text-gray-700">Time</label>
-                            <input type="time" name="time" id="editScheduleTime" required 
-                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                    </div>
-                    
                     <div>
                         <label for="editScheduleStatus" class="block text-sm font-medium text-gray-700">Status</label>
-                        <select name="status" id="editScheduleStatus" required
-                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <select name="status" id="editScheduleStatus" required class="w-full border p-2">
                             <option value="upcoming">Upcoming</option>
                             <option value="completed">Completed</option>
                             <option value="cancelled">Cancelled</option>
                         </select>
                     </div>
                 </div>
-                
+
                 <div class="flex justify-end space-x-3 mt-6">
-                    <button type="button" onclick="closeEditScheduleModal()" 
-                            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+                    <button type="button" onclick="closeEditScheduleModal()" class="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-100">
                         Cancel
                     </button>
-                    <button type="submit" 
-                            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-                        Update Schedule
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                        Update
                     </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+function openEditScheduleModal(id, date, time, notes, status) {
+    document.getElementById('editScheduleId').value = id;
+    document.getElementById('editScheduleDate').value = date;
+    document.getElementById('editScheduleTime').value = time;
+    document.getElementById('editScheduleDescription').value = notes;
+    document.getElementById('editScheduleStatus').value = status;
+
+    // Set form action ke route update Laravel
+    document.getElementById('editScheduleForm').action = `/schedule/${id}`;
+
+    // Tampilkan modal
+    document.getElementById('editScheduleModal').classList.remove('hidden');
+}
+
+function closeEditScheduleModal() {
+    document.getElementById('editScheduleModal').classList.add('hidden');
+}
+</script>
 
 <!-- Delete Schedule Modal -->
 <div id="deleteScheduleModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
@@ -284,54 +288,32 @@
     
     // Edit schedule
     function editSchedule(scheduleId) {
-        fetch(`/api/schedules/${scheduleId}`, { // Ini request AJAX-nya
-            method: 'GET',
-            headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-                // 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Tidak perlu untuk GET request API dengan middleware 'web'
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                // Tangani error HTTP (misal 404, 403, 500)
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Isi field-field di modal edit schedule
-            document.getElementById('editScheduleId').value = data.id; // Simpan ID di hidden input
-            document.getElementById('editScheduleTitle').value = data.title;
-            document.getElementById('editScheduleDescription').value = data.description || ''; // Pastikan ada nilai default jika null
+    fetch(`/schedule/${scheduleId}/json`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json'
+        },
+        credentials: 'same-origin' // INI PENTING agar session login ikut!
+    })
+    .then(response => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+    })
+    .then(data => {
+        const dateTime = new Date(data.scheduled_at);
+        document.getElementById('editScheduleDate').value = dateTime.toISOString().split('T')[0];
+        document.getElementById('editScheduleTime').value = dateTime.toTimeString().slice(0, 5);
+        document.getElementById('editScheduleDescription').value = data.notes;
+        document.getElementById('editScheduleStatus').value = data.status;
+        document.getElementById('editScheduleForm').action = `/schedule/${data.id}`;
+        document.getElementById('editScheduleModal').classList.remove('hidden');
+    })
+    .catch(err => {
+        console.error('Gagal fetch:', err);
+        alert('Gagal mengambil data jadwal. Silakan coba lagi. Cek console browser untuk detail.');
+    });
+}
 
-            // Mengisi tanggal dan waktu
-            // data.start_time adalah string datetime ISO, misal "2025-06-20T07:50:00.000000Z"
-            const startDate = new Date(data.start_time);
-            document.getElementById('editScheduleDate').value = startDate.toISOString().split('T')[0]; // Format 'YYYY-MM-DD'
-            document.getElementById('editScheduleTime').value = startDate.toTimeString().split(' ')[0].substring(0, 5); // Format 'HH:MM'
-            
-            // Mengisi status dropdown
-            const statusSelect = document.getElementById('editScheduleStatus');
-            Array.from(statusSelect.options).forEach(option => {
-                if (option.value === data.status) {
-                    option.selected = true;
-                } else {
-                    option.selected = false;
-                }
-            });
-
-            // Atur action form untuk update
-            document.getElementById('editScheduleForm').action = `/schedule/${data.id}`;
-
-            // Tampilkan modal edit jadwal
-            document.getElementById('editScheduleModal').classList.remove('hidden');
-        })
-        .catch(error => {
-            console.error('Error fetching schedule data:', error);
-            alert('Gagal mengambil data jadwal. Silakan coba lagi. Cek console browser untuk detail.');
-        });
-    }
     
     // Delete schedule
     function deleteSchedule(scheduleId) {
