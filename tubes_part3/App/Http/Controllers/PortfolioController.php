@@ -6,10 +6,16 @@ use App\Models\Portfolio;
 use App\Models\Skill;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Storage;
 
 class PortfolioController extends Controller
 {
+use Illuminate\Support\Facades\Storage; 
+
+class PortfolioController extends Controller
+{
+
     public function index()
     {
         $portfolios = Portfolio::where('user_id', Auth::id())
@@ -61,11 +67,22 @@ class PortfolioController extends Controller
         return view('portfolio.edit', compact('portfolio', 'skills', 'portfolioSkills'));
     }
 
+        if ($schedule->user1_id !== Auth::id() && $schedule->user2_id !== Auth::id()) {
+        abort(403, 'Anda tidak diizinkan untuk mengedit jadwal ini.');
+        }
+
+        $users = User::orderBy('name')->get();
+
+        return view('schedule.edit', compact('schedule', 'users'));
+    }
+
     public function update(Request $request, Portfolio $portfolio)
     {
 
         if ($portfolio->user_id !== Auth::id()) {
+
             abort(403, 'Unauthorized action.');
+            abort(403, 'Unauthorized action.'); 
         }
 
         $request->validate([
@@ -99,6 +116,16 @@ class PortfolioController extends Controller
 
         $portfolio->update($updateData);
         $portfolio->skills()->sync($request->skills);
+        } elseif ($request->input('clear_file')) { 
+             if ($portfolio->file_path && Storage::disk('public')->exists($portfolio->file_path)) {
+                Storage::disk('public')->delete($portfolio->file_path);
+            }
+            $updateData['file_path'] = null; 
+        }
+
+
+        $portfolio->update($updateData); 
+        $portfolio->skills()->sync($request->skills); 
 
         return redirect()->route('profile')->with('success', 'Portfolio updated successfully!');
     }
