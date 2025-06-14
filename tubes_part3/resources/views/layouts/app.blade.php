@@ -73,7 +73,6 @@
                             </div>
                         </div>
                     </div>
-                    {{-- TOMBOL HAMBURGER UNTUK MOBILE --}}
                     <div class="-mr-2 flex items-center sm:hidden">
                         <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out" onclick="toggleMobileMenu()">
                             <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -86,7 +85,6 @@
             </div>
         </div>
 
-        {{-- MOBILE MENU - AKAN MUNCUL SAAT HAMBURGER DIKLIK --}}
         <div id="mobile-menu" class="hidden sm:hidden">
             <div class="pt-2 pb-3 space-y-1">
                 <a href="{{ route('dashboard') }}" class="block pl-3 pr-4 py-2 border-l-4 border-blue-500 text-base font-medium text-blue-700 bg-blue-50">

@@ -30,6 +30,31 @@
             </div>
         </div>
         
+<<<<<<< Updated upstream
+=======
+        <!-- Warnings Section -->
+        <div class="mt-8">
+            <h3 class="text-xl font-semibold mb-4">Your Warnings</h3>
+            @forelse($warnings as $warning)
+                <div class="bg-pink-100 border-l-4 border-pink-500 text-pink-700 p-4 mb-2 rounded">
+                    <p class="font-bold">{{ $warning->subject }}</p>
+                    <p class="text-sm">{{ $warning->description }}</p>
+                    @if($warning->admin)
+                        <p class="text-xs text-gray-600">Oleh Admin: {{ $warning->admin->name }}</p>
+                    @endif
+                    @if($warning->expires_at)
+                        <p class="text-xs text-gray-600">Kadaluarsa: {{ $warning->expires_at->format('d M Y') }}</p>
+                    @endif
+                    <p class="text-xs text-gray-600">Status: {{ ucfirst($warning->status) }}</p>
+                </div>
+            @empty
+                <div class="bg-gray-100 border-l-4 border-gray-500 text-gray-700 p-4 mb-2 rounded">
+                    <p class="text-gray-500">Tidak ada peringatan untuk Anda.</p>
+                </div>
+            @endforelse
+        </div>
+
+>>>>>>> Stashed changes
         <!-- Portfolio Section -->
         <div class="lg:col-span-2">
             <div class="bg-white shadow rounded-lg p-6">

@@ -35,7 +35,31 @@ class PortfolioApiController extends Controller
 
     public function show($id)
     {
+<<<<<<< Updated upstream
         $portfolio = Portfolio::findOrFail($id);
         return response()->json($portfolio);
+=======
+        try {
+            $portfolio = Portfolio::where('user_id', Auth::id())
+                                ->with('skills') 
+                                ->find($id);
+
+            if (!$portfolio) {
+                return response()->json(['message' => 'Portfolio not found or unauthorized.'], 404);
+            }
+
+            return response()->json($portfolio, 200);
+
+        } catch (\Exception $e) {
+            Log::error('Error fetching single portfolio item via API:', [
+                'user_id' => Auth::id(),
+                'portfolio_id' => $id,
+                'error_message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
+            return response()->json(['message' => 'Failed to fetch portfolio item due to a server error.'], 500);
+        }
+>>>>>>> Stashed changes
     }
 }

@@ -6,36 +6,24 @@ use App\Http\Controllers\Controller;
 use App\Models\Warning;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule; // Untuk validasi 'status'
+use Illuminate\Validation\Rule; 
 
 class WarningController extends Controller
 {
-    /**
-     * Display a listing of the warnings.
-     * GET /api/warnings
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function index(Request $request)
     {
-        $warnings = Warning::with(['user', 'admin'])->latest()->paginate(10); // Ambil 10 peringatan per halaman
+        $warnings = Warning::with(['user', 'admin'])->latest()->paginate(10); 
         return response()->json([
             'message' => 'Warnings retrieved successfully.',
             'data' => $warnings
         ], 200);
     }
 
-    /**
-     * Store a newly created warning in storage.
-     * POST /api/warnings
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'user_id' => 'required|exists:users,id',
-            'admin_id' => 'required|exists:users,id', // Pastikan admin_id ada di tabel users
+            'admin_id' => 'required|exists:users,id', 
             'warning_type' => 'required|string|max:255',
             'subject' => 'required|string|max:255',
             'message' => 'required|string',
@@ -46,7 +34,7 @@ class WarningController extends Controller
             return response()->json([
                 'message' => 'Validation Error.',
                 'errors' => $validator->errors()
-            ], 422); // Unprocessable Entity
+            ], 422); 
         }
 
         $warning = Warning::create($request->all());
@@ -54,15 +42,9 @@ class WarningController extends Controller
         return response()->json([
             'message' => 'Warning created successfully.',
             'data' => $warning
-        ], 201); // Created
+        ], 201); 
     }
 
-    /**
-     * Display the specified warning.
-     * GET /api/warnings/{id}
-     * @param int $id
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function show(int $id)
     {
         $warning = Warning::with(['user', 'admin'])->find($id);
@@ -70,7 +52,7 @@ class WarningController extends Controller
         if (!$warning) {
             return response()->json([
                 'message' => 'Warning not found.'
-            ], 404); // Not Found
+            ], 404); 
         }
 
         return response()->json([
@@ -79,13 +61,6 @@ class WarningController extends Controller
         ], 200);
     }
 
-    /**
-     * Update the specified warning in storage.
-     * PUT/PATCH /api/warnings/{id}
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function update(Request $request, int $id)
     {
         $warning = Warning::find($id);
@@ -97,7 +72,7 @@ class WarningController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'user_id' => 'sometimes|required|exists:users,id', // 'sometimes' karena tidak harus selalu diupdate
+            'user_id' => 'sometimes|required|exists:users,id', 
             'admin_id' => 'sometimes|required|exists:users,id',
             'warning_type' => 'sometimes|required|string|max:255',
             'subject' => 'sometimes|required|string|max:255',
@@ -121,12 +96,6 @@ class WarningController extends Controller
         ], 200);
     }
 
-    /**
-     * Remove the specified warning from storage.
-     * DELETE /api/warnings/{id}
-     * @param int $id
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function destroy(int $id)
     {
         $warning = Warning::find($id);
@@ -141,6 +110,6 @@ class WarningController extends Controller
 
         return response()->json([
             'message' => 'Warning deleted successfully.'
-        ], 200); // OK
+        ], 200); 
     }
 }
