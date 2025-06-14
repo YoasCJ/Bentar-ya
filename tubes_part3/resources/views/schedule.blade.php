@@ -285,12 +285,17 @@
     }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     // Edit schedule
     function editSchedule(scheduleId) {
 <<<<<<< Updated upstream
         fetch(`/api/schedules/${scheduleId}`, {
 =======
         fetch(`/schedules/${scheduleId}`, { // Ini request AJAX-nya
+>>>>>>> Stashed changes
+=======
+    function editSchedule(scheduleId) {
+        fetch(`/api/schedules/${scheduleId}`, { 
 >>>>>>> Stashed changes
 =======
     function editSchedule(scheduleId) {
@@ -306,6 +311,9 @@
 =======
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
             }
         })
@@ -316,6 +324,7 @@
             return response.json();
         })
         .then(data => {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
             document.getElementById('editScheduleId').value = data.id;
             document.getElementById('editScheduleTitle').value = data.title;
@@ -358,12 +367,56 @@
             const methodSelect = document.getElementById('editScheduleMethod'); 
             Array.from(methodSelect.options).forEach(option => {
                 if (option.value === data.method) { 
+=======
+            document.getElementById('editScheduleId').value = data.id; 
+            const currentUserId = {{ Auth::id() }};
+            let participantName = '';
+            if (data.user1_id === currentUserId) {
+                participantName = data.user2.name; 
+            } else if (data.user2_id === currentUserId) {
+                participantName = data.user1.name; 
+            }
+            document.getElementById('editScheduleParticipantName').textContent = participantName;
+
+
+            document.getElementById('editScheduleDescription').value = data.notes || ''; 
+
+            if (data.scheduled_at) {
+                const scheduledAtDate = new Date(data.scheduled_at);
+                if (!isNaN(scheduledAtDate.getTime())) { 
+                    document.getElementById('editScheduleDate').value = scheduledAtDate.toISOString().split('T')[0];
+                    document.getElementById('editScheduleTime').value = scheduledAtDate.toTimeString().split(' ')[0].substring(0, 5);
+                } else {
+                    console.warn('Invalid scheduled_at date received from API:', data.scheduled_at);
+                    document.getElementById('editScheduleDate').value = '';
+                    document.getElementById('editScheduleTime').value = '';
+                }
+            } else {
+                console.warn('scheduled_at is null or empty from API.');
+                document.getElementById('editScheduleDate').value = '';
+                document.getElementById('editScheduleTime').value = '';
+            }
+
+            const methodSelect = document.getElementById('editScheduleMethod'); 
+            Array.from(methodSelect.options).forEach(option => {
+                if (option.value === data.method) { 
                     option.selected = true;
                 } else {
                     option.selected = false;
                 }
             });
 
+            const statusSelect = document.getElementById('editScheduleStatus');
+            Array.from(statusSelect.options).forEach(option => {
+                if (option.value === data.status) {
+>>>>>>> Stashed changes
+                    option.selected = true;
+                } else {
+                    option.selected = false;
+                }
+            });
+
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes
             const statusSelect = document.getElementById('editScheduleStatus');
             Array.from(statusSelect.options).forEach(option => {
@@ -375,6 +428,10 @@
 =======
 
 >>>>>>> Stashed changes
+=======
+            document.getElementById('editScheduleForm').action = `/schedule/${data.id}`;
+
+>>>>>>> Stashed changes
             document.getElementById('editScheduleModal').classList.remove('hidden');
         })
         .catch(error => {
@@ -383,8 +440,12 @@
         });
     }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
    
     // Delete schedule
+=======
+
+>>>>>>> Stashed changes
 =======
 
 >>>>>>> Stashed changes

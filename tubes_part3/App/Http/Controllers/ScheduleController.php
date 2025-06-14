@@ -49,9 +49,13 @@ class ScheduleController extends Controller
         }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         dd($schedule);
 
         $users = User::orderBy('name')->get();
+=======
+        $users = User::orderBy('name')->get(); 
+>>>>>>> Stashed changes
 =======
         $users = User::orderBy('name')->get(); 
 >>>>>>> Stashed changes

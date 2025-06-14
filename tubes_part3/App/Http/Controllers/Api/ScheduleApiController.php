@@ -8,7 +8,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 use Illuminate\Support\Facades\Log;
+=======
+use Illuminate\Support\Facades\Log; 
+>>>>>>> Stashed changes
 =======
 use Illuminate\Support\Facades\Log; 
 >>>>>>> Stashed changes
@@ -60,6 +64,7 @@ class ScheduleApiController extends Controller
     public function store(Request $request)
     {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         Log::info('Current authenticated user ID', ['user_id' => Auth::id()]);
 
         try {
@@ -70,12 +75,15 @@ class ScheduleApiController extends Controller
                 'notes' => 'nullable|string',
             ]);
 =======
+=======
+>>>>>>> Stashed changes
         $request->validate([
             'user2_id' => 'required|exists:users,id|different:user1_id', 
             'scheduled_at' => 'required|date|after:now',
             'method' => 'required|in:online,offline',
             'notes' => 'nullable|string',
         ]);
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes
 
         try {
@@ -85,10 +93,17 @@ class ScheduleApiController extends Controller
 =======
                 'user1_id' => Auth::id(), 
 >>>>>>> Stashed changes
+=======
+
+        try {
+            $schedule = Schedule::create([
+                'user1_id' => Auth::id(), 
+>>>>>>> Stashed changes
                 'user2_id' => $request->user2_id,
                 'scheduled_at' => $request->scheduled_at,
                 'method' => $request->method,
                 'notes' => $request->notes,
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                 'status' => 'upcoming',
             ]);
@@ -118,11 +133,21 @@ class ScheduleApiController extends Controller
             Log::error('Error in ScheduleApiController@store: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
             return response()->json(['message' => 'Failed to create schedule.', 'error' => $e->getMessage()], 500);
 >>>>>>> Stashed changes
+=======
+                'status' => 'upcoming', 
+            ]);
+
+            return response()->json(['message' => 'Schedule created successfully!', 'schedule' => $schedule], 201);
+        } catch (\Exception $e) {
+            Log::error('Error in ScheduleApiController@store: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
+            return response()->json(['message' => 'Failed to create schedule.', 'error' => $e->getMessage()], 500);
+>>>>>>> Stashed changes
         }
     }
 
     public function show(Schedule $schedule)
     {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         \Log::info('User:', [auth()->user()]);
         return Schedule::findOrFail($id);
@@ -254,6 +279,35 @@ class ScheduleApiController extends Controller
         ]);
 
         try {
+=======
+        if ($schedule->user1_id !== Auth::id() && $schedule->user2_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized to view this schedule.'], 403);
+        }
+
+        try {
+            $schedule->load(['user1', 'user2']);
+            return response()->json($schedule);
+        } catch (\Exception $e) {
+            Log::error('Error in ScheduleApiController@show: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
+            return response()->json(['message' => 'Failed to retrieve schedule details.', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function update(Request $request, Schedule $schedule)
+    {
+        if ($schedule->user1_id !== Auth::id() && $schedule->user2_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized to update this schedule.'], 403);
+        }
+
+        $request->validate([
+            'scheduled_at' => 'required|date|after:now',
+            'method' => 'required|in:online,offline',
+            'notes' => 'nullable|string',
+            'status' => 'required|in:upcoming,completed,cancelled',
+        ]);
+
+        try {
+>>>>>>> Stashed changes
             $schedule->update([
                 'scheduled_at' => $request->scheduled_at,
                 'method' => $request->method,
