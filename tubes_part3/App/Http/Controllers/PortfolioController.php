@@ -51,14 +51,13 @@ class PortfolioController extends Controller
 
     public function edit(Portfolio $portfolio)
     {
-        if ($portfolio->user_id !== Auth::id()) {
-            abort(403, 'Anda tidak diizinkan untuk mengedit portfolio ini.');
+        if ($schedule->user1_id !== Auth::id() && $schedule->user2_id !== Auth::id()) {
+        abort(403, 'Anda tidak diizinkan untuk mengedit jadwal ini.');
         }
 
-        $skills = Skill::orderBy('name')->get();
-        $portfolioSkills = $portfolio->skills->pluck('id')->toArray();
+        $users = User::orderBy('name')->get();
 
-        return view('portfolio.edit', compact('portfolio', 'skills', 'portfolioSkills'));
+        return view('schedule.edit', compact('schedule', 'users'));
     }
 
 
@@ -89,6 +88,7 @@ class PortfolioController extends Controller
                 Storage::disk('public')->delete($portfolio->file_path);
             }
             $updateData['file_path'] = $request->file('file')->store('portfolios', 'public');
+
         } elseif ($request->input('clear_file')) { 
              if ($portfolio->file_path && Storage::disk('public')->exists($portfolio->file_path)) {
                 Storage::disk('public')->delete($portfolio->file_path);

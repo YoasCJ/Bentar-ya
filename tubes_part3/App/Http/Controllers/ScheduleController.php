@@ -44,22 +44,17 @@ class ScheduleController extends Controller
 
     public function edit(Schedule $schedule)
     {
-        // Otorisasi: Pastikan hanya pemilik jadwal yang bisa mengedit
         if ($schedule->user_id !== Auth::id()) {
             abort(403, 'Anda tidak diizinkan untuk mengedit jadwal ini.');
         }
 
-        // Jika Anda perlu data user lain untuk dropdown di form edit (misal: penanggung jawab)
         $users = User::orderBy('name')->get(); 
 
-        // Mengirim objek $schedule (berisi data lama) dan $users ke view Blade.
-        // Pastikan nama view-nya sesuai dengan file Blade Anda (misal: 'schedule.edit')
         return view('schedule.edit', compact('schedule', 'users'));
     }
 
     public function update(Request $request, Schedule $schedule)
     {
-        // Check if user is part of the schedule
         if ($schedule->user1_id !== Auth::id() && $schedule->user2_id !== Auth::id()) {
             abort(403);
         }
@@ -83,7 +78,6 @@ class ScheduleController extends Controller
 
     public function destroy(Schedule $schedule)
     {
-        // Check if user is part of the schedule
         if ($schedule->user1_id !== Auth::id() && $schedule->user2_id !== Auth::id()) {
             abort(403);
         }
