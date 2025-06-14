@@ -48,9 +48,13 @@ class ScheduleController extends Controller
             abort(403, 'Anda tidak diizinkan untuk mengedit jadwal ini.');
         }
 
+<<<<<<< Updated upstream
         dd($schedule);
 
         $users = User::orderBy('name')->get();
+=======
+        $users = User::orderBy('name')->get(); 
+>>>>>>> Stashed changes
 
         return view('schedule.edit', compact('schedule', 'users'));
     }
