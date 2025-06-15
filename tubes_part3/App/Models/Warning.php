@@ -20,7 +20,10 @@ class Warning extends Model
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         'admin_id',
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -43,8 +46,13 @@ class Warning extends Model
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         return $this->belongsTo(User::class, 'admin_id');
     }
+=======
+        return $this->belongsTo(User::class, 'admin_id');}
+
+>>>>>>> Stashed changes
 =======
         return $this->belongsTo(User::class, 'admin_id');}
 

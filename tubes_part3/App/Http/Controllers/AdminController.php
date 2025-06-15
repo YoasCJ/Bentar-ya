@@ -21,7 +21,10 @@ class AdminController extends Controller
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         // 1. Ambil data statistik ringkas
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -73,7 +76,11 @@ class AdminController extends Controller
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             $user->delete();
+=======
+            $user->delete(); 
+>>>>>>> Stashed changes
 =======
             $user->delete(); 
 >>>>>>> Stashed changes
@@ -139,7 +146,10 @@ class AdminController extends Controller
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
