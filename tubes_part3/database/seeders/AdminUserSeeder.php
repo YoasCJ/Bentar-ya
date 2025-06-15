@@ -9,20 +9,16 @@ use App\Models\User;
 
 class AdminUserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         if (!User::where('email', 'admin@example.com')->exists()) {
             User::create([
                 'name' => 'Administrator',
                 'email' => 'admin@example.com',
-                'password' => Hash::make('password'), // Password default: 'password'
-                'role' => 'admin', // Ini yang paling penting: set role jadi 'admin'
-                'department' => 'IT', // Sesuaikan dengan departemen default
-                'batch' => '2020',    // Sesuaikan dengan angkatan default
-                // Tambahkan kolom lain jika ada yang required di model User Anda
+                'password' => Hash::make('password'), 
+                'role' => 'admin', 
+                'department' => 'IT', 
+                'batch' => '2020',    
             ]);
 
             $this->command->info('Admin user created successfully!');

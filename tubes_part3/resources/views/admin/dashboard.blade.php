@@ -39,7 +39,6 @@
                 <i class="fas fa-briefcase text-4xl text-purple-300"></i>
             </div>
 
-            {{-- --- Tambahan untuk Peringatan --- --}}
             @isset($totalWarnings)
             <div class="bg-white rounded-lg shadow p-5 flex items-center justify-between">
                 <div>
@@ -59,12 +58,10 @@
                 <i class="fas fa-clock text-4xl text-orange-300"></i>
             </div>
             @endisset
-            {{-- ----------------------------- --}}
 
         </div>
     </div>
 
-    {{-- BAGIAN LINK CEPAT MENU ADMIN LAINNYA --}}
     <div class="mb-10">
         <h2 class="text-2xl font-bold text-gray-900 mb-4">Aksi Cepat Admin</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -83,8 +80,6 @@
         </div>
     </div>
 
-
-    {{-- BAGIAN AKTIVITAS TERBARU --}}
     <div class="mb-10">
         <h2 class="text-2xl font-bold text-gray-900 mb-4">Aktivitas Terbaru</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -100,7 +95,6 @@
                 </ul>
             </div>
 
-            {{-- Aktivitas Pengguna Terbaru --}}
             <div class="bg-white rounded-lg shadow p-6">
                 <h3 class="text-xl font-semibold text-gray-800 mb-4">Pengguna Baru</h3>
                 <ul class="list-disc pl-5 space-y-2 text-gray-700">
@@ -112,7 +106,6 @@
                 </ul>
             </div>
 
-            {{-- Aktivitas Portfolio Terbaru --}}
             <div class="bg-white rounded-lg shadow p-6">
                 <h3 class="text-xl font-semibold text-gray-800 mb-4">Portfolio Terbaru</h3>
                 <ul class="list-disc pl-5 space-y-2 text-gray-700">
@@ -124,7 +117,6 @@
                 </ul>
             </div>
 
-            {{-- --- Tambahan untuk Aktivitas Peringatan Terbaru --- --}}
             @isset($latestWarnings)
             <div class="bg-white rounded-lg shadow p-6">
                 <h3 class="text-xl font-semibold text-gray-800 mb-4">Peringatan Terbaru</h3>
@@ -137,7 +129,6 @@
                 </ul>
             </div>
             @endisset
-            {{-- ------------------------------------------------- --}}
 
         </div>
     </div>

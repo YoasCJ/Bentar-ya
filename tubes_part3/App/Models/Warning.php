@@ -17,7 +17,22 @@ class Warning extends Model
         'level',
         'expires_at',
         'status',
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
         'admin_id',
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
     ];
 
     protected $casts = [
@@ -31,6 +46,31 @@ class Warning extends Model
 
     public function admin()
     {
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
         return $this->belongsTo(User::class, 'admin_id');
     }
+=======
+        return $this->belongsTo(User::class, 'admin_id');}
+
+>>>>>>> Stashed changes
+=======
+        return $this->belongsTo(User::class, 'admin_id');}
+
+>>>>>>> Stashed changes
+=======
+        return $this->belongsTo(User::class, 'admin_id');}
+
+>>>>>>> Stashed changes
+=======
+        return $this->belongsTo(User::class, 'admin_id');}
+
+>>>>>>> Stashed changes
+=======
+        return $this->belongsTo(User::class, 'admin_id');}
+
+>>>>>>> Stashed changes
 }

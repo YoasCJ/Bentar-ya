@@ -1,8 +1,6 @@
-@extends('layouts.app')
+<?php $__env->startSection('title', 'Dashboard - Skill Exchange'); ?>
 
-@section('title', 'Dashboard - Skill Exchange')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex justify-between items-center mb-8">
         <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
@@ -13,127 +11,112 @@
     </div>
 
     <div class="mb-6 flex flex-col sm:flex-row gap-4">
-        <form method="GET" action="{{ route('dashboard') }}" class="flex-1">
+        <form method="GET" action="<?php echo e(route('dashboard')); ?>" class="flex-1">
             <div class="relative">
-                <input type="text" name="search" value="{{ request('search') }}" 
+                <input type="text" name="search" value="<?php echo e(request('search')); ?>" 
                         placeholder="Search posts..." 
                         class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                 <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
             </div>
         </form>
-        <form method="GET" action="{{ route('dashboard') }}">
-            <input type="hidden" name="search" value="{{ request('search') }}">
+        <form method="GET" action="<?php echo e(route('dashboard')); ?>">
+            <input type="hidden" name="search" value="<?php echo e(request('search')); ?>">
             <select name="type" onchange="this.form.submit()" 
                     class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                <option value="all" {{ request('type') == 'all' ? 'selected' : '' }}>All Posts</option>
-                <option value="open" {{ request('type') == 'open' ? 'selected' : '' }}>Open for Help</option>
-                <option value="need" {{ request('type') == 'need' ? 'selected' : '' }}>Need Help</option>
+                <option value="all" <?php echo e(request('type') == 'all' ? 'selected' : ''); ?>>All Posts</option>
+                <option value="open" <?php echo e(request('type') == 'open' ? 'selected' : ''); ?>>Open for Help</option>
+                <option value="need" <?php echo e(request('type') == 'need' ? 'selected' : ''); ?>>Need Help</option>
             </select>
         </form>
     </div>
 
-    @if($posts->count() > 0)
+    <?php if($posts->count() > 0): ?>
     <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        @foreach($posts as $post)
+        <?php $__currentLoopData = $posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <div class="bg-white rounded-lg shadow-md p-6">
             <div class="flex justify-between items-start mb-4">
                 <div class="flex-1">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ $post->title }}</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2"><?php echo e($post->title); ?></h3>
                     <p class="text-sm text-gray-600">
-                        Posted by {{ $post->user->name }} • {{ $post->user->department }} • {{ $post->user->batch }}
+                        Posted by <?php echo e($post->user->name); ?> • <?php echo e($post->user->department); ?> • <?php echo e($post->user->batch); ?>
+
                     </p>
                 </div>
                 <div class="flex items-center space-x-2">
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $post->type == 'open' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                        {{ $post->type == 'open' ? 'Open for Help' : 'Need Help' }}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?php echo e($post->type == 'open' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'); ?>">
+                        <?php echo e($post->type == 'open' ? 'Open for Help' : 'Need Help'); ?>
+
                     </span>
-                    @if($post->user_id == auth()->id())
+                    <?php if($post->user_id == auth()->id()): ?>
                     <div class="relative">
-                        <button onclick="togglePostMenu({{ $post->id }})" class="text-gray-400 hover:text-gray-600">
+                        <button onclick="togglePostMenu(<?php echo e($post->id); ?>)" class="text-gray-400 hover:text-gray-600">
                             <i class="fas fa-ellipsis-v"></i>
                         </button>
-                        <div id="postMenu{{ $post->id }}" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
-                            <button onclick="editPost({{ $post->id }})" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        <div id="postMenu<?php echo e($post->id); ?>" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+                            <button onclick="editPost(<?php echo e($post->id); ?>)" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 <i class="fas fa-edit mr-2"></i>Edit
                             </button>
-                            <button onclick="deletePost({{ $post->id }})" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                            <button onclick="deletePost(<?php echo e($post->id); ?>)" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
                                 <i class="fas fa-trash mr-2"></i>Delete
                             </button>
                         </div>
                     </div>
-                    @endif
+                    <?php endif; ?>
                 </div>
             </div>
             
-            <p class="text-gray-700 mb-4">{{ Str::limit($post->description, 100) }}</p>
+            <p class="text-gray-700 mb-4"><?php echo e(Str::limit($post->description, 100)); ?></p>
             
             <div class="flex flex-wrap gap-2 mb-4">
-                @foreach($post->skills as $skill)
+                <?php $__currentLoopData = $post->skills; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $skill): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                    {{ $skill->name }}
+                    <?php echo e($skill->name); ?>
+
                 </span>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
             
             <div class="flex justify-between items-center border-t pt-4">
                 <span class="text-sm text-gray-500">
                     <i class="fas fa-calendar mr-1"></i>
-                    Deadline: {{ $post->deadline->format('M d, Y') }}
+                    Deadline: <?php echo e($post->deadline->format('M d, Y')); ?>
+
                 </span>
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-                @if($post->user_id != auth()->id()) {{-- Hanya tampilkan tombol kontak jika bukan post sendiri --}}
-                    {{-- Tombol Contact/Offer Help akan jadi link Email --}}
-=======
-                @if($post->user_id != auth()->id()) 
->>>>>>> Stashed changes
-=======
-                @if($post->user_id != auth()->id()) 
->>>>>>> Stashed changes
-=======
-                @if($post->user_id != auth()->id()) 
->>>>>>> Stashed changes
-=======
-                @if($post->user_id != auth()->id()) 
->>>>>>> Stashed changes
-=======
-                @if($post->user_id != auth()->id()) 
->>>>>>> Stashed changes
-                    <a href="mailto:{{ $post->user->email }}" 
+                <?php if($post->user_id != auth()->id()): ?> 
+                    <a href="mailto:<?php echo e($post->user->email); ?>" 
                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm inline-flex items-center">
-                        <i class="fas fa-envelope mr-2"></i> {{ $post->type == 'open' ? 'Contact' : 'Offer Help' }}
+                        <i class="fas fa-envelope mr-2"></i> <?php echo e($post->type == 'open' ? 'Contact' : 'Offer Help'); ?>
+
                     </a>
-                @else
+                <?php else: ?>
                     <span class="text-sm text-gray-500">Your Post</span>
-                @endif
+                <?php endif; ?>
             </div>
         </div>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
 
     <div class="mt-8">
-        {{ $posts->links() }}
+        <?php echo e($posts->links()); ?>
+
     </div>
-    @else
+    <?php else: ?>
     <div class="text-center py-12">
         <i class="fas fa-search text-6xl text-gray-300 mb-4"></i>
         <h3 class="text-xl font-semibold text-gray-900 mb-2">No posts found</h3>
         <p class="text-gray-600 mb-6">
-            @if(request('search'))
+            <?php if(request('search')): ?>
                 Try adjusting your search or filter to find what you're looking for.
-            @else
+            <?php else: ?>
                 Create your first post to get started!
-            @endif
+            <?php endif; ?>
         </p>
         <button onclick="openCreateModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg">
             <i class="fas fa-plus mr-2"></i>
             Create Post
         </button>
     </div>
-    @endif
+    <?php endif; ?>
 </div>
 
 <div id="createModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
@@ -146,8 +129,8 @@
                 </button>
             </div>
             
-            <form action="{{ route('posts.store') }}" method="POST">
-                @csrf
+            <form action="<?php echo e(route('posts.store')); ?>" method="POST">
+                <?php echo csrf_field(); ?>
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Post Type</label>
@@ -178,12 +161,12 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Skills</label>
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-40 overflow-y-auto border border-gray-300 rounded-md p-3">
-                            @foreach($skills as $skill)
+                            <?php $__currentLoopData = $skills; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $skill): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <label class="flex items-center">
-                                <input type="checkbox" name="skills[]" value="{{ $skill->id }}" class="mr-2">
-                                <span class="text-sm">{{ $skill->name }}</span>
+                                <input type="checkbox" name="skills[]" value="<?php echo e($skill->id); ?>" class="mr-2">
+                                <span class="text-sm"><?php echo e($skill->name); ?></span>
                             </label>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </div>
                     
@@ -191,7 +174,7 @@
                         <div>
                             <label for="deadline" class="block text-sm font-medium text-gray-700">Deadline</label>
                             <input type="date" name="deadline" id="deadline" required 
-                                    min="{{ date('Y-m-d', strtotime('+1 day')) }}"
+                                    min="<?php echo e(date('Y-m-d', strtotime('+1 day'))); ?>"
                                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         
@@ -233,8 +216,8 @@
             </div>
             
             <form id="editForm" method="POST">
-                @csrf
-                @method('PUT')
+                <?php echo csrf_field(); ?>
+                <?php echo method_field('PUT'); ?>
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Post Type</label>
@@ -265,12 +248,12 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Skills</label>
                         <div id="editSkills" class="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-40 overflow-y-auto border border-gray-300 rounded-md p-3">
-                            @foreach($skills as $skill)
+                            <?php $__currentLoopData = $skills; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $skill): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <label class="flex items-center">
-                                <input type="checkbox" name="skills[]" value="{{ $skill->id }}" class="mr-2">
-                                <span class="text-sm">{{ $skill->name }}</span>
+                                <input type="checkbox" name="skills[]" value="<?php echo e($skill->id); ?>" class="mr-2">
+                                <span class="text-sm"><?php echo e($skill->name); ?></span>
                             </label>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </div>
                     
@@ -278,7 +261,7 @@
                         <div>
                             <label for="editDeadline" class="block text-sm font-medium text-gray-700">Deadline</label>
                             <input type="date" name="deadline" id="editDeadline" required 
-                                    min="{{ date('Y-m-d', strtotime('+1 day')) }}"
+                                    min="<?php echo e(date('Y-m-d', strtotime('+1 day'))); ?>"
                                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         
@@ -327,8 +310,8 @@
                     Cancel
                 </button>
                 <form id="deleteForm" method="POST" class="inline">
-                    @csrf
-                    @method('DELETE')
+                    <?php echo csrf_field(); ?>
+                    <?php echo method_field('DELETE'); ?>
                     <button type="submit" 
                             class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
                         Delete
@@ -382,4 +365,5 @@
         }
     }
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\TUBES_WAD\Bentar-ya\tubes_part3\resources\views/dashboard.blade.php ENDPATH**/ ?>

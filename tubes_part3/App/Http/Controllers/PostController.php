@@ -66,8 +66,25 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
         if (Auth::id() !== $post->user_id && !(Auth::check() && Auth::user()->is_admin)) {
             return back()->with('error', 'Anda tidak memiliki izin untuk menghapus postingan ini.');
+=======
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+        if ($post->user_id !== Auth::id()) {
+            abort(403);
+>>>>>>> Stashed changes
         }
 
         try {

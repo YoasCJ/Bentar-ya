@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Skill Exchange')</title>
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+    <title><?php echo $__env->yieldContent('title', 'Skill Exchange'); ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
@@ -28,31 +28,31 @@
     </style>
 </head>
 <body class="bg-gray-50">
-    @auth
+    <?php if(auth()->guard()->check()): ?>
     <nav class="bg-white shadow-sm border-b">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center"> 
                     <div class="flex-shrink-0 flex items-center">
-                        <a href="{{ route('dashboard') }}" class="text-xl font-bold text-blue-600">
+                        <a href="<?php echo e(route('dashboard')); ?>" class="text-xl font-bold text-blue-600">
                             <i class="fas fa-exchange-alt mr-2"></i>Skill Exchange
                         </a>
                     </div>
                     <div class="hidden sm:ml-6 sm:flex sm:space-x-8 items-center"> 
-                        <a href="{{ route('dashboard') }}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm {{ request()->routeIs('dashboard') ? 'border-blue-500 text-blue-600' : '' }}">
+                        <a href="<?php echo e(route('dashboard')); ?>" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm <?php echo e(request()->routeIs('dashboard') ? 'border-blue-500 text-blue-600' : ''); ?>">
                             Dashboard
                         </a>
-                        <a href="{{ route('schedule') }}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm {{ request()->routeIs('schedule') ? 'border-blue-500 text-blue-600' : '' }}">
+                        <a href="<?php echo e(route('schedule')); ?>" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm <?php echo e(request()->routeIs('schedule') ? 'border-blue-500 text-blue-600' : ''); ?>">
                             Schedule
                         </a>
-                        <a href="{{ route('profile') }}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm {{ request()->routeIs('profile') ? 'border-blue-500 text-blue-600' : '' }}">
+                        <a href="<?php echo e(route('profile')); ?>" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm <?php echo e(request()->routeIs('profile') ? 'border-blue-500 text-blue-600' : ''); ?>">
                             Profile
                         </a>
-                        @if(Auth::check() && Auth::user()->role === 'admin')
-                        <a href="{{ route('admin.dashboard') }}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm {{ request()->routeIs('admin.dashboard') ? 'border-blue-500 text-blue-600' : '' }}">
+                        <?php if(Auth::check() && Auth::user()->role === 'admin'): ?>
+                        <a href="<?php echo e(route('admin.dashboard')); ?>" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm <?php echo e(request()->routeIs('admin.dashboard') ? 'border-blue-500 text-blue-600' : ''); ?>">
                             Admin Dashboard
                         </a>
-                        @endif
+                        <?php endif; ?>
                     </div>
                 </div>
                 <div class="flex items-center">
@@ -60,20 +60,20 @@
                         <button class="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" onclick="toggleDropdown()">
                             <span class="sr-only">Open user menu</span>
                             <div class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-medium">
-                                {{ substr(auth()->user()->name, 0, 1) }}
+                                <?php echo e(substr(auth()->user()->name, 0, 1)); ?>
+
                             </div>
                         </button>
                         <div id="userDropdown" class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                             <div class="py-1">
-                                <a href="{{ route('profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Your Profile</a>
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
+                                <a href="<?php echo e(route('profile')); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Your Profile</a>
+                                <form method="POST" action="<?php echo e(route('logout')); ?>">
+                                    <?php echo csrf_field(); ?>
                                     <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign out</button>
                                 </form>
                             </div>
                         </div>
                     </div>
-                    {{-- TOMBOL HAMBURGER UNTUK MOBILE --}}
                     <div class="-mr-2 flex items-center sm:hidden">
                         <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out" onclick="toggleMobileMenu()">
                             <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -86,16 +86,15 @@
             </div>
         </div>
 
-        {{-- MOBILE MENU - AKAN MUNCUL SAAT HAMBURGER DIKLIK --}}
         <div id="mobile-menu" class="hidden sm:hidden">
             <div class="pt-2 pb-3 space-y-1">
-                <a href="{{ route('dashboard') }}" class="block pl-3 pr-4 py-2 border-l-4 border-blue-500 text-base font-medium text-blue-700 bg-blue-50">
+                <a href="<?php echo e(route('dashboard')); ?>" class="block pl-3 pr-4 py-2 border-l-4 border-blue-500 text-base font-medium text-blue-700 bg-blue-50">
                     Dashboard
                 </a>
-                <a href="{{ route('schedule') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300">
+                <a href="<?php echo e(route('schedule')); ?>" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300">
                     Schedule
                 </a>
-                <a href="{{ route('profile') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300">
+                <a href="<?php echo e(route('profile')); ?>" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300">
                     Profile
                 </a>
             </div>
@@ -103,21 +102,22 @@
                 <div class="flex items-center px-4">
                     <div class="flex-shrink-0">
                         <div class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-medium text-lg">
-                            {{ substr(auth()->user()->name, 0, 1) }}
+                            <?php echo e(substr(auth()->user()->name, 0, 1)); ?>
+
                         </div>
                     </div>
                     <div class="ml-3">
-                        <div class="font-medium text-base text-gray-800">{{ auth()->user()->name }}</div>
-                        <div class="font-medium text-sm text-gray-500">{{ auth()->user()->email }}</div>
+                        <div class="font-medium text-base text-gray-800"><?php echo e(auth()->user()->name); ?></div>
+                        <div class="font-medium text-sm text-gray-500"><?php echo e(auth()->user()->email); ?></div>
                     </div>
                 </div>
 
                 <div class="mt-3 space-y-1">
-                    <a href="{{ route('profile') }}" class="block px-4 py-2 text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50">
+                    <a href="<?php echo e(route('profile')); ?>" class="block px-4 py-2 text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50">
                         Your Profile
                     </a>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
+                    <form method="POST" action="<?php echo e(route('logout')); ?>">
+                        <?php echo csrf_field(); ?>
                         <button type="submit" class="block w-full text-left px-4 py-2 text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50">
                             Sign out
                         </button>
@@ -126,13 +126,13 @@
             </div>
         </div>
     </nav>
-    @endauth
+    <?php endif; ?>
 
     <main>
-        @if(session('success'))
+        <?php if(session('success')): ?>
         <div id="success-alert" class="flash-alert bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
             <strong class="font-bold">Success!</strong>
-            <span class="block sm:inline">{{ session('success') }}</span>
+            <span class="block sm:inline"><?php echo e(session('success')); ?></span>
             <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
                 <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" onclick="closeFlashAlert('success-alert')">
                     <title>Close</title>
@@ -140,12 +140,12 @@
                 </svg>
             </span>
         </div>
-        @endif
+        <?php endif; ?>
 
-        @if(session('error'))
+        <?php if(session('error')): ?>
         <div id="error-alert" class="flash-alert bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
             <strong class="font-bold">Error!</strong>
-            <span class="block sm:inline">{{ session('error') }}</span>
+            <span class="block sm:inline"><?php echo e(session('error')); ?></span>
             <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
                 <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" onclick="closeFlashAlert('error-alert')">
                     <title>Close</title>
@@ -153,9 +153,9 @@
                 </svg>
             </span>
         </div>
-        @endif
+        <?php endif; ?>
 
-        @yield('content')
+        <?php echo $__env->yieldContent('content'); ?>
     </main>
 
     <script>
@@ -235,4 +235,4 @@
         });
     </script>
 </body>
-</html>
+</html><?php /**PATH C:\xampp\htdocs\TUBES_WAD\Bentar-ya\tubes_part3\resources\views/layouts/app.blade.php ENDPATH**/ ?>

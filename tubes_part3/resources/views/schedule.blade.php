@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Header -->
     <div class="flex justify-between items-center mb-8">
         <h1 class="text-3xl font-bold text-gray-900">Schedule</h1>
         <button onclick="openCreateScheduleModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
@@ -13,7 +12,6 @@
         </button>
     </div>
 
-    <!-- Schedules Table -->
     @if($schedules->count() > 0)
     <div class="bg-white shadow overflow-hidden sm:rounded-md">
         <ul class="divide-y divide-gray-200">
@@ -27,9 +25,9 @@
                                     Session with {{ $schedule->user1_id == auth()->id() ? $schedule->user2->name : $schedule->user1->name }}
                                 </p>
                                 <div class="ml-2 flex-shrink-0 flex">
-                                    <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                       {{ $schedule->status == 'upcoming' ? 'bg-green-100 text-green-800' : 
-                                          ($schedule->status == 'completed' ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-800') }}">
+                                    <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                        {{ $schedule->status == 'upcoming' ? 'bg-green-100 text-green-800' :
+                                            ($schedule->status == 'completed' ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-800') }}">
                                         {{ ucfirst($schedule->status) }}
                                     </p>
                                 </div>
@@ -73,7 +71,6 @@
         </ul>
     </div>
 
-    <!-- Pagination -->
     <div class="mt-8">
         {{ $schedules->links() }}
     </div>
@@ -90,7 +87,6 @@
     @endif
 </div>
 
-<!-- Create Schedule Modal -->
 <div id="createScheduleModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
     <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-1/2 shadow-lg rounded-md bg-white">
         <div class="mt-3">
@@ -100,13 +96,13 @@
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-            
+
             <form action="{{ route('schedule.store') }}" method="POST">
                 @csrf
                 <div class="space-y-4">
                     <div>
                         <label for="user2_id" class="block text-sm font-medium text-gray-700">Select User</label>
-                        <select name="user2_id" id="user2_id" required 
+                        <select name="user2_id" id="user2_id" required
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Choose a user...</option>
                             @foreach($users as $user)
@@ -114,45 +110,45 @@
                             @endforeach
                         </select>
                     </div>
-                    
+
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label for="scheduled_date" class="block text-sm font-medium text-gray-700">Date</label>
-                            <input type="date" name="scheduled_date" id="scheduled_date" required 
-                                   min="{{ date('Y-m-d', strtotime('+1 day')) }}"
-                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            <input type="date" name="scheduled_date" id="scheduled_date" required
+                                        min="{{ date('Y-m-d', strtotime('+1 day')) }}"
+                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         </div>
-                        
+
                         <div>
                             <label for="scheduled_time" class="block text-sm font-medium text-gray-700">Time</label>
-                            <input type="time" name="scheduled_time" id="scheduled_time" required 
-                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            <input type="time" name="scheduled_time" id="scheduled_time" required
+                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         </div>
                     </div>
-                    
+
                     <div>
                         <label for="method" class="block text-sm font-medium text-gray-700">Method</label>
-                        <select name="method" id="method" required 
+                        <select name="method" id="method" required
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                             <option value="online">Online</option>
                             <option value="offline">Offline</option>
                         </select>
                     </div>
-                    
+
                     <div>
                         <label for="notes" class="block text-sm font-medium text-gray-700">Notes</label>
-                        <textarea name="notes" id="notes" rows="3" 
-                                  class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                                  placeholder="Add any additional notes or agenda..."></textarea>
+                        <textarea name="notes" id="notes" rows="3"
+                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="Add any additional notes or agenda..."></textarea>
                     </div>
                 </div>
-                
+
                 <div class="flex justify-end space-x-3 mt-6">
-                    <button type="button" onclick="closeCreateScheduleModal()" 
+                    <button type="button" onclick="closeCreateScheduleModal()"
                             class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
                         Cancel
                     </button>
-                    <button type="submit" 
+                    <button type="submit"
                             class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
                         Create Schedule
                     </button>
@@ -162,7 +158,6 @@
     </div>
 </div>
 
-<!-- Edit Schedule Modal -->
 <div id="editScheduleModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
     <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-1/2 shadow-lg rounded-md bg-white">
         <div class="mt-3">
@@ -181,17 +176,40 @@
 
                 <div class="space-y-4">
                     <div>
-                        <label for="editScheduleDate" class="block text-sm font-medium text-gray-700">Date</label>
-                        <input type="date" name="scheduled_at_date" id="editScheduleDate" required class="w-full border p-2">
+                        {{-- Judul untuk Edit Modal --}}
+                        <label for="editScheduleTitle" class="block text-sm font-medium text-gray-700">Session with</label>
+                        {{-- Kita tidak mengedit user lain secara langsung, ini hanya display --}}
+                        <p id="editScheduleParticipantName" class="mt-1 text-base text-gray-900 font-semibold"></p>
                     </div>
-                    <div>
-                        <label for="editScheduleTime" class="block text-sm font-medium text-gray-700">Time</label>
-                        <input type="time" name="scheduled_at_time" id="editScheduleTime" required class="w-full border p-2">
-                    </div>
+
                     <div>
                         <label for="editScheduleDescription" class="block text-sm font-medium text-gray-700">Notes</label>
-                        <textarea name="notes" id="editScheduleDescription" rows="3" class="w-full border p-2"></textarea>
+                        <textarea name="notes" id="editScheduleDescription" rows="3"
+                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
                     </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="editScheduleDate" class="block text-sm font-medium text-gray-700">Date</label>
+                            <input type="date" name="scheduled_date" id="editScheduleDate" required
+                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="editScheduleTime" class="block text-sm font-medium text-gray-700">Time</label>
+                            <input type="time" name="scheduled_time" id="editScheduleTime" required
+                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="editScheduleMethod" class="block text-sm font-medium text-gray-700">Method</label>
+                        <select name="method" id="editScheduleMethod" required
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            <option value="online">Online</option>
+                            <option value="offline">Offline</option>
+                        </select>
+                    </div>
+
                     <div>
                         <label for="editScheduleStatus" class="block text-sm font-medium text-gray-700">Status</label>
                         <select name="status" id="editScheduleStatus" required class="w-full border p-2">
@@ -203,11 +221,13 @@
                 </div>
 
                 <div class="flex justify-end space-x-3 mt-6">
-                    <button type="button" onclick="closeEditScheduleModal()" class="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-100">
+                    <button type="button" onclick="closeEditScheduleModal()"
+                            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
                         Cancel
                     </button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                        Update
+                    <button type="submit"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                        Update Schedule
                     </button>
                 </div>
             </form>
@@ -215,27 +235,6 @@
     </div>
 </div>
 
-<script>
-function openEditScheduleModal(id, date, time, notes, status) {
-    document.getElementById('editScheduleId').value = id;
-    document.getElementById('editScheduleDate').value = date;
-    document.getElementById('editScheduleTime').value = time;
-    document.getElementById('editScheduleDescription').value = notes;
-    document.getElementById('editScheduleStatus').value = status;
-
-    // Set form action ke route update Laravel
-    document.getElementById('editScheduleForm').action = `/schedule/${id}`;
-
-    // Tampilkan modal
-    document.getElementById('editScheduleModal').classList.remove('hidden');
-}
-
-function closeEditScheduleModal() {
-    document.getElementById('editScheduleModal').classList.add('hidden');
-}
-</script>
-
-<!-- Delete Schedule Modal -->
 <div id="deleteScheduleModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
     <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
         <div class="mt-3 text-center">
@@ -249,14 +248,14 @@ function closeEditScheduleModal() {
                 </p>
             </div>
             <div class="flex justify-center space-x-3 mt-4">
-                <button onclick="closeDeleteScheduleModal()" 
+                <button onclick="closeDeleteScheduleModal()"
                         class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
                     Cancel
                 </button>
                 <form id="deleteScheduleForm" method="POST" class="inline">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" 
+                    <button type="submit"
                             class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
                         Delete
                     </button>
@@ -267,27 +266,24 @@ function closeEditScheduleModal() {
 </div>
 
 <script>
-    // Schedule modal functions
     function openCreateScheduleModal() {
         document.getElementById('createScheduleModal').classList.remove('hidden');
     }
-    
+
     function closeCreateScheduleModal() {
         document.getElementById('createScheduleModal').classList.add('hidden');
     }
-    
+
     function closeEditScheduleModal() {
         document.getElementById('editScheduleModal').classList.add('hidden');
     }
-    
+
     function closeDeleteScheduleModal() {
         document.getElementById('deleteScheduleModal').classList.add('hidden');
     }
 
-
-    
-    // Edit schedule
     function editSchedule(scheduleId) {
+
     fetch(`/schedule/${scheduleId}/json`, {
         method: 'GET',
         headers: {
@@ -314,18 +310,88 @@ function closeEditScheduleModal() {
     });
 }
 
+
+        fetch(`/api/schedules/${scheduleId}`, { 
+            method: 'GET',
+            headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('editScheduleId').value = data.id; 
+            const currentUserId = {{ Auth::id() }};
+            let participantName = '';
+            if (data.user1_id === currentUserId) {
+                participantName = data.user2.name; 
+            } else if (data.user2_id === currentUserId) {
+                participantName = data.user1.name; 
+            }
+            document.getElementById('editScheduleParticipantName').textContent = participantName;
+
+
+            document.getElementById('editScheduleDescription').value = data.notes || ''; 
+
+            if (data.scheduled_at) {
+                const scheduledAtDate = new Date(data.scheduled_at);
+                if (!isNaN(scheduledAtDate.getTime())) { 
+                    document.getElementById('editScheduleDate').value = scheduledAtDate.toISOString().split('T')[0];
+                    document.getElementById('editScheduleTime').value = scheduledAtDate.toTimeString().split(' ')[0].substring(0, 5);
+                } else {
+                    console.warn('Invalid scheduled_at date received from API:', data.scheduled_at);
+                    document.getElementById('editScheduleDate').value = '';
+                    document.getElementById('editScheduleTime').value = '';
+                }
+            } else {
+                console.warn('scheduled_at is null or empty from API.');
+                document.getElementById('editScheduleDate').value = '';
+                document.getElementById('editScheduleTime').value = '';
+            }
+
+            const methodSelect = document.getElementById('editScheduleMethod'); 
+            Array.from(methodSelect.options).forEach(option => {
+                if (option.value === data.method) { 
+                    option.selected = true;
+                } else {
+                    option.selected = false;
+                }
+            });
+
+            const statusSelect = document.getElementById('editScheduleStatus');
+            Array.from(statusSelect.options).forEach(option => {
+                if (option.value === data.status) {
+                    option.selected = true;
+                } else {
+                    option.selected = false;
+                }
+            });
+
+            document.getElementById('editScheduleForm').action = `/schedule/${data.id}`;
+
+            document.getElementById('editScheduleModal').classList.remove('hidden');
+        })
+        .catch(error => {
+            console.error('Error fetching schedule data:', error);
+            alert('Gagal mengambil data jadwal. Silakan coba lagi. Cek console browser untuk detail.');
+        });
     
-    // Delete schedule
+    
+
     function deleteSchedule(scheduleId) {
         document.getElementById('deleteScheduleModal').classList.remove('hidden');
         document.getElementById('deleteScheduleForm').action = `/schedule/${scheduleId}`;
     }
-    
-    // Combine date and time for scheduled_at
+
     document.querySelector('#createScheduleModal form').addEventListener('submit', function(e) {
         const date = document.getElementById('scheduled_date').value;
         const time = document.getElementById('scheduled_time').value;
-        
+
         if (date && time) {
             const scheduledAt = date + ' ' + time;
             const hiddenInput = document.createElement('input');
@@ -335,11 +401,11 @@ function closeEditScheduleModal() {
             this.appendChild(hiddenInput);
         }
     });
-    
+
     document.querySelector('#editScheduleModal form').addEventListener('submit', function(e) {
-        const date = document.getElementById('editScheduledDate').value;
-        const time = document.getElementById('editScheduledTime').value;
-        
+        const date = document.getElementById('editScheduleDate').value; 
+        const time = document.getElementById('editScheduleTime').value; 
+
         if (date && time) {
             const scheduledAt = date + ' ' + time;
             const hiddenInput = document.createElement('input');
