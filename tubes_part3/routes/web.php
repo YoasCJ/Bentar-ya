@@ -22,8 +22,11 @@ Route::get('/', function () {
 })->name('home');
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 // Authentication routes
 =======
+=======
+>>>>>>> Stashed changes
 // Rute untuk login
 >>>>>>> Stashed changes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -33,6 +36,10 @@ Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('
 Route::post('/register', [AuthController::class, 'register']);
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+// Rute untuk logout
+>>>>>>> Stashed changes
 =======
 // Rute untuk logout
 >>>>>>> Stashed changes
@@ -54,8 +61,11 @@ Route::middleware('auth')->group(function () {
     Route::put('/schedule/{schedule}', [ScheduleController::class, 'update'])->name('schedule.update');
     Route::delete('/schedule/{schedule}', [ScheduleController::class, 'destroy'])->name('schedule.destroy');
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     Route::get('/schedule/{schedule}/edit', [ScheduleController::class, 'edit'])->name('schedule.edit');
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 
@@ -65,14 +75,18 @@ Route::middleware('auth')->group(function () {
 
     // Portfolio
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio.index');
     Route::get('/portfolio/create', [PortfolioController::class, 'create'])->name('portfolio.create');
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     Route::post('/portfolio', [PortfolioController::class, 'store'])->name('portfolio.store');
     Route::get('/portfolio/{portfolio}/edit', [PortfolioController::class, 'edit'])->name('portfolio.edit');
     Route::put('/portfolio/{portfolio}', [PortfolioController::class, 'update'])->name('portfolio.update');
     Route::delete('/portfolio/{portfolio}', [PortfolioController::class, 'destroy'])->name('portfolio.destroy');
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 
     Route::resource('api/schedules', ScheduleApiController::class)->except(['create', 'edit']); 
@@ -84,16 +98,21 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     // Dashboard Admin
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
 =======
+=======
+>>>>>>> Stashed changes
 });
 
 // Rute khusus untuk Dashboard Admin
 Route::middleware('role:admin')->prefix('admin')->group(function () { 
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard'); 
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes
 
     // Manajemen User
     Route::get('/users', [AdminController::class, 'users'])->name('users.index');
     Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('users.destroy');
+=======
+>>>>>>> Stashed changes
 
     // Manajemen Posts 
     Route::get('/posts', [AdminController::class, 'posts'])->name('posts.index');
@@ -108,6 +127,9 @@ Route::middleware('role:admin')->prefix('admin')->group(function () {
     // manajemen portfolio
     Route::get('/portfolios', [AdminController::class, 'portfolios'])->name('admin.portfolios.index');
     Route::delete('/portfolios/{portfolio}', [AdminController::class, 'destroyPortfolio'])->name('admin.portfolios.destroy');
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
     // Manajemen Peringatan

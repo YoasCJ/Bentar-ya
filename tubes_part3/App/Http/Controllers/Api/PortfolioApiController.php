@@ -38,6 +38,11 @@ class PortfolioApiController extends Controller
     public function show($id)
     {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+        $portfolio = Portfolio::findOrFail($id);
+        return response()->json($portfolio);
+>>>>>>> Stashed changes
 =======
         $portfolio = Portfolio::findOrFail($id);
         return response()->json($portfolio);

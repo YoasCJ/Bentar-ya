@@ -19,7 +19,10 @@ class AdminController extends Controller
     public function index()
     {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         // 1. Ambil data statistik ringkas
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         $totalUsers = User::count();
@@ -65,7 +68,11 @@ class AdminController extends Controller
 
         try {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             $user->delete();
+=======
+            $user->delete(); 
+>>>>>>> Stashed changes
 =======
             $user->delete(); 
 >>>>>>> Stashed changes
@@ -123,7 +130,10 @@ class AdminController extends Controller
             return redirect()->route('admin.portfolios.index')->with('success', 'Portfolio berhasil dihapus.');
         } catch (\Exception $e) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
             $portfolio->delete(); 
             return redirect()->route('admin.portfolios.index')->with('success', 'Portfolio berhasil dihapus.');
         } catch (\Exception $e) {

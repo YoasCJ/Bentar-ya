@@ -286,6 +286,9 @@
 
 =======
     
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     function editSchedule(scheduleId) {
         fetch(`/api/schedules/${scheduleId}`, { 
@@ -362,6 +365,9 @@
 
 =======
     
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     function deleteSchedule(scheduleId) {
         document.getElementById('deleteScheduleModal').classList.remove('hidden');
@@ -371,6 +377,9 @@
 
 =======
     
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     document.querySelector('#createScheduleModal form').addEventListener('submit', function(e) {
         const date = document.getElementById('scheduled_date').value;

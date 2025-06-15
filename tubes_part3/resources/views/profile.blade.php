@@ -10,6 +10,7 @@
                 <div class="text-center">
                     <div class="h-24 w-24 rounded-full bg-blue-500 flex items-center justify-center mx-auto mb-4 text-white text-2xl font-bold">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                         {{ substr($targetUser->name, 0, 1) }}
                     </div>
                     <h2 class="text-xl font-semibold text-gray-900">{{ $targetUser->name }}</h2>
@@ -20,6 +21,18 @@
                 </div>
                 
                 @if($targetUser->id == auth()->id())
+=======
+                        {{ substr($displayUser->name, 0, 1) }}
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-900">{{ $displayUser->name }}</h2>
+                    <p class="text-gray-600">{{ $displayUser->department }} • {{ $displayUser->batch }}</p>
+                    @if($displayUser->description)
+                    <p class="mt-4 text-sm text-gray-700">{{ $displayUser->description }}</p>
+                    @endif
+                </div>
+                
+                @if($displayUser->id == auth()->id())
+>>>>>>> Stashed changes
 =======
                         {{ substr($displayUser->name, 0, 1) }}
                     </div>
@@ -43,7 +56,10 @@
         </div>
         
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         <!-- Warnings Section -->
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         <div class="mt-8">
@@ -68,7 +84,10 @@
         </div>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         <!-- Portfolio Section -->
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         <div class="lg:col-span-2">
@@ -76,7 +95,11 @@
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-semibold text-gray-900">Portfolio</h3>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                     @if($targetUser->id == auth()->id())
+=======
+                    @if($displayUser->id == auth()->id())
+>>>>>>> Stashed changes
 =======
                     @if($displayUser->id == auth()->id())
 >>>>>>> Stashed changes
@@ -94,7 +117,11 @@
                         <div class="flex justify-between items-start mb-3">
                             <h4 class="text-lg font-medium text-gray-900">{{ $portfolio->title }}</h4>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                             @if($targetUser->id == auth()->id())
+=======
+                            @if($displayUser->id == auth()->id())
+>>>>>>> Stashed changes
 =======
                             @if($displayUser->id == auth()->id())
 >>>>>>> Stashed changes
@@ -142,6 +169,7 @@
                     <h3 class="text-xl font-semibold text-gray-900 mb-2">No portfolio items yet</h3>
                     <p class="text-gray-600 mb-6">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                         @if($targetUser->id == auth()->id())
                             Add your first portfolio item to showcase your work!
                         @else
@@ -149,6 +177,15 @@
                         @endif
                     </p>
                     @if($targetUser->id == auth()->id())
+=======
+                        @if($displayUser->id == auth()->id())
+                            Add your first portfolio item to showcase your work!
+                        @else
+                            {{ $displayUser->name }} hasn't added any portfolio items yet.
+                        @endif
+                    </p>
+                    @if($displayUser->id == auth()->id())
+>>>>>>> Stashed changes
 =======
                         @if($displayUser->id == auth()->id())
                             Add your first portfolio item to showcase your work!
@@ -169,6 +206,7 @@
         </div>
     </div>
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     <!-- Edit Profile Modal -->
     @if($targetUser->id == auth()->id())
@@ -254,6 +292,8 @@
                         </button>
                     </div>
 =======
+=======
+>>>>>>> Stashed changes
 @if($displayUser->id == auth()->id())
 <div id="editProfileModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
     <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-1/2 shadow-lg rounded-md bg-white">
@@ -711,7 +751,10 @@
     }
     
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     // Edit portfolio - MODIFIKASI INI UNTUK MENGISI DATA LAMA
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     function editPortfolio(portfolioId) {

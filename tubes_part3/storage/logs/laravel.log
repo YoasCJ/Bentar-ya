@@ -8466,4 +8466,7 @@ Did you mean one of these?
 #60 C:\\xampp\\htdocs\\TUBES_WAD\\Bentar-ya\\tubes_part3\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(23): require_once('...')
 #61 {main}
 "} 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
