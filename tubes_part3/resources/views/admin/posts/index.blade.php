@@ -6,8 +6,6 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold text-gray-900">Manajemen Postingan</h1>
-        {{-- Tombol untuk menambah postingan baru (jika ada rute dan formnya nanti) --}}
-        {{-- Asumsi Anda akan membuat rute admin.posts.create dan method di AdminController --}}
         @if (Route::has('admin.posts.create'))
             <a href="{{ route('admin.posts.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300">
                 <i class="fas fa-plus mr-2"></i> Tambah Postingan Baru
@@ -28,7 +26,7 @@
     @endif
 
     <div class="bg-white rounded-lg shadow overflow-hidden">
-        <div class="overflow-x-auto"> {{-- Agar tabel bisa di-scroll di layar kecil --}}
+        <div class="overflow-x-auto"> 
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
@@ -65,20 +63,14 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $post->status ?? 'N/A' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $post->created_at->format('d M Y H:i') }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            {{-- Link Lihat Detail Postingan --}}
-                            {{-- Asumsi Anda akan membuat rute admin.posts.show --}}
                             @if (Route::has('admin.posts.show'))
                                 <a href="{{ route('admin.posts.show', $post->id) }}" class="text-blue-600 hover:text-blue-900 mr-2">Lihat</a>
                             @endif
 
-                            {{-- Link Edit Postingan --}}
-                            {{-- Asumsi Anda akan membuat rute admin.posts.edit --}}
                             @if (Route::has('admin.posts.edit'))
                                 <a href="{{ route('admin.posts.edit', $post->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-2">Edit</a>
                             @endif
 
-                            {{-- Form Hapus Postingan --}}
-                            {{-- Asumsi Anda akan membuat rute admin.posts.destroy --}}
                             @if (Route::has('admin.posts.destroy'))
                                 <form action="{{ route('admin.posts.destroy', $post->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus postingan ini? Aksi ini tidak dapat dibatalkan!');">
                                     @csrf
@@ -97,7 +89,6 @@
             </table>
         </div>
         
-        {{-- Bagian Pagination --}}
         <div class="p-4">
             {{ $posts->links() }}
         </div>

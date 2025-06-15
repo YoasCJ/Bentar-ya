@@ -3,27 +3,19 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User; // Penting untuk membuat user baru
+use App\Models\User; 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash; // Untuk hash password
-use Illuminate\Support\Facades\Auth; // Untuk autentikasi dan login setelah register
-use Illuminate\Validation\ValidationException; // Untuk error validasi
+use Illuminate\Support\Facades\Hash; 
+use Illuminate\Support\Facades\Auth; 
+use Illuminate\Validation\ValidationException; 
 
 class AuthController extends Controller
 {
-    // --- Login Methods ---
-
-    /**
-     * Tampilkan form login.
-     */
     public function showLoginForm()
     {
-        return view('auth.login'); // Memuat view Blade untuk login
+        return view('auth.login'); 
     }
 
-    /**
-     * Proses percobaan login.
-     */
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -41,9 +33,6 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * Proses logout pengguna.
-     */
     public function logout(Request $request)
     {
         Auth::logout();
@@ -52,11 +41,6 @@ class AuthController extends Controller
         return redirect('/')->with('success', 'Anda telah berhasil logout.');
     }
 
-    // --- Register Methods ---
-
-    /**
-     * Tampilkan form registrasi.
-     */
     public function showRegistrationForm()
     {
         return view('auth.register'); 

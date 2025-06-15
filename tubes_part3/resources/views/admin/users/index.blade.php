@@ -4,11 +4,8 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    {{-- BARIS YANG SALAH INI, PERHATIKAN PENAMBAHAN 'div' --}}
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold text-gray-900">Manajemen Pengguna</h1>
-        {{-- Tombol untuk menambah pengguna baru (jika ada rute dan formnya nanti) --}}
-        {{-- Asumsi Anda akan membuat rute admin.users.create dan method di AdminController --}}
         @if (Route::has('admin.users.create'))
             <a href="{{ route('admin.users.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300">
                 <i class="fas fa-plus mr-2"></i> Tambah Pengguna Baru
@@ -16,7 +13,6 @@
         @endif
     </div>
 
-    {{-- Pesan sukses atau error --}}
     @if (session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
             <span class="block sm:inline">{{ session('success') }}</span>
@@ -29,7 +25,7 @@
     @endif
 
     <div class="bg-white rounded-lg shadow overflow-hidden">
-        <div class="overflow-x-auto"> {{-- Agar tabel bisa di-scroll di layar kecil --}}
+        <div class="overflow-x-auto"> 
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
@@ -62,12 +58,10 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $user->role ?? 'user' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $user->created_at->format('d M Y H:i') }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            {{-- Link Edit Pengguna (akan berfungsi jika rute dan methodnya ada) --}}
                             @if (Route::has('admin.users.edit'))
                                 <a href="{{ route('admin.users.edit', $user->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-2">Edit</a>
                             @endif
 
-                            {{-- FORM HAPUS PENGGUNA --}}
                             @if (Route::has('admin.users.destroy'))
                                 <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengguna {{ $user->name }}? Aksi ini tidak dapat dibatalkan!');">
                                     @csrf
@@ -86,7 +80,6 @@
             </table>
         </div>
         
-        {{-- Bagian Pagination --}}
         <div class="p-4">
             {{ $users->links() }}
         </div>

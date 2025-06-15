@@ -16,8 +16,8 @@
                     <span class="text-2xl font-bold text-gray-900">Skill Exchange</span>
                 </div>
                 <div class="flex space-x-4">
-                    <a href="{{ route('login') }}" class="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Sign In</a>
-                    <a href="{{ route('register') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">Get Started</a>
+                    <a href="<?php echo e(route('login')); ?>" class="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Sign In</a>
+                    <a href="<?php echo e(route('register')); ?>" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">Get Started</a>
                 </div>
             </div>
         </div>
@@ -33,11 +33,11 @@
                     Connect with others to exchange skills and knowledge. Offer help or request assistance in a collaborative learning environment.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="{{ route('register') }}" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300">
+                    <a href="<?php echo e(route('register')); ?>" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300">
                         Get Started
                         <i class="fas fa-arrow-right ml-2"></i>
                     </a>
-                    <a href="{{ route('login') }}" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition duration-300">
+                    <a href="<?php echo e(route('login')); ?>" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition duration-300">
                         Sign In
                     </a>
                 </div>
@@ -146,4 +146,4 @@
         </div>
     </footer>
 </body>
-</html>
+</html><?php /**PATH C:\xampp\htdocs\TUBES_WAD\Bentar-ya\tubes_part3\resources\views/welcome.blade.php ENDPATH**/ ?>

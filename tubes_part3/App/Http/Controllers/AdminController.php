@@ -18,7 +18,10 @@ class AdminController extends Controller
 {
     public function index()
     {
+<<<<<<< Updated upstream
         // 1. Ambil data statistik ringkas
+=======
+>>>>>>> Stashed changes
         $totalUsers = User::count();
         // Pastikan kolom 'status' dan 'type' ada di tabel 'posts' atau sesuaikan query
         $totalOpenPosts = Post::where('status', 'open')->count();
@@ -61,7 +64,11 @@ class AdminController extends Controller
         }
 
         try {
+<<<<<<< Updated upstream
             $user->delete();
+=======
+            $user->delete(); 
+>>>>>>> Stashed changes
             return redirect()->route('admin.users.index')->with('success', 'Pengguna berhasil dihapus.');
         } catch (\Exception $e) {
             \Log::error('Error deleting user: ' . $e->getMessage(), ['user_id' => $user->id]);
@@ -82,7 +89,20 @@ class AdminController extends Controller
 
     public function destroyPost(Post $post)
     {
+<<<<<<< Updated upstream
         return (new PostController())->destroy($post);
+=======
+        try {
+            $post->delete();
+            return redirect()->route('admin.posts.index')->with('success', 'Postingan berhasil dihapus.');
+        } catch (\Exception $e) {
+            $post->delete(); 
+            return redirect()->route('admin.posts.index')->with('success', 'Postingan berhasil dihapus.');
+        } catch (\Exception $e) {
+            \Log::error('Error deleting post: ' . $e->getMessage(), ['post_id' => $post->id]);
+            return back()->with('error', 'Gagal menghapus postingan: ' . $e->getMessage());
+        }
+>>>>>>> Stashed changes
     }
 
     public function portfolios()
@@ -102,6 +122,12 @@ class AdminController extends Controller
             $portfolio->delete();
             return redirect()->route('admin.portfolios.index')->with('success', 'Portfolio berhasil dihapus.');
         } catch (\Exception $e) {
+<<<<<<< Updated upstream
+=======
+            $portfolio->delete(); 
+            return redirect()->route('admin.portfolios.index')->with('success', 'Portfolio berhasil dihapus.');
+        } catch (\Exception $e) {
+>>>>>>> Stashed changes
             \Log::error('Error deleting portfolio: ' . $e->getMessage(), ['portfolio_id' => $portfolio->id]);
             return back()->with('error', 'Gagal menghapus portfolio: ' . $e->getMessage());
         }

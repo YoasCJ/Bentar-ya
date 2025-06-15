@@ -282,7 +282,11 @@
     function closeDeleteScheduleModal() {
         document.getElementById('deleteScheduleModal').classList.add('hidden');
     }
+<<<<<<< Updated upstream
 
+=======
+    
+>>>>>>> Stashed changes
     function editSchedule(scheduleId) {
         fetch(`/api/schedules/${scheduleId}`, { 
             method: 'GET',
@@ -354,12 +358,20 @@
             alert('Gagal mengambil data jadwal. Silakan coba lagi. Cek console browser untuk detail.');
         });
     }
+<<<<<<< Updated upstream
 
+=======
+    
+>>>>>>> Stashed changes
     function deleteSchedule(scheduleId) {
         document.getElementById('deleteScheduleModal').classList.remove('hidden');
         document.getElementById('deleteScheduleForm').action = `/schedule/${scheduleId}`;
     }
+<<<<<<< Updated upstream
 
+=======
+    
+>>>>>>> Stashed changes
     document.querySelector('#createScheduleModal form').addEventListener('submit', function(e) {
         const date = document.getElementById('scheduled_date').value;
         const time = document.getElementById('scheduled_time').value;

@@ -13,7 +13,6 @@ class DashboardController extends Controller
     {
         $query = Post::with(['user', 'skills']);
 
-        // Search functionality
         if ($request->has('search') && $request->search) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -25,7 +24,6 @@ class DashboardController extends Controller
             });
         }
 
-        // Filter by type
         if ($request->has('type') && $request->type !== 'all') {
             $query->where('type', $request->type);
         }

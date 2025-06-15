@@ -63,7 +63,10 @@ class PortfolioController extends Controller
 
     public function update(Request $request, Portfolio $portfolio)
     {
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
         if ($portfolio->user_id !== Auth::id()) {
             abort(403, 'Unauthorized action.'); 
         }

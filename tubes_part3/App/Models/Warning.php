@@ -17,7 +17,10 @@ class Warning extends Model
         'level',
         'expires_at',
         'status',
+<<<<<<< Updated upstream
         'admin_id',
+=======
+>>>>>>> Stashed changes
     ];
 
     protected $casts = [
@@ -31,6 +34,11 @@ class Warning extends Model
 
     public function admin()
     {
+<<<<<<< Updated upstream
         return $this->belongsTo(User::class, 'admin_id');
     }
+=======
+        return $this->belongsTo(User::class, 'admin_id');}
+
+>>>>>>> Stashed changes
 }

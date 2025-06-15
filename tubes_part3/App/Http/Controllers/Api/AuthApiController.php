@@ -53,7 +53,7 @@ class AuthApiController extends Controller
                 'message' => 'Registrasi berhasil!', // Tambahkan pesan sukses
                 'user' => $user,
                 'token' => $user->createToken('api_token')->plainTextToken
-            ], 201); // 201 Created
+            ], 201); 
 
         } catch (\Illuminate\Validation\ValidationException $e) { // Tangkap ValidationException
             return response()->json([

@@ -14,6 +14,7 @@ class ProfileController extends Controller
 {
     public function show(?User $user = null)
     {
+<<<<<<< Updated upstream
         $targetUser = $user ?? Auth::user(); 
 
         if (!$targetUser) {
@@ -33,6 +34,21 @@ class ProfileController extends Controller
         $skills = Skill::orderBy('name')->get(); 
 
         return view('profile', compact('targetUser', 'warnings', 'portfolios', 'skills')); 
+=======
+        $displayUser = $user ?? Auth::user();
+
+        if (!$displayUser) {
+            abort(404, 'Pengguna tidak ditemukan.');
+        }
+
+        $warnings = Warning::where('user_id', $displayUser->id)
+                           ->orderBy('created_at', 'desc')
+                           ->get();
+
+        $portfolios = $displayUser->portfolios()->with('skills')->get();
+        $skills = Skill::all();
+        return view('profile', compact('displayUser', 'warnings', 'portfolios', 'skills'));
+>>>>>>> Stashed changes
     }
 
     public function update(Request $request)

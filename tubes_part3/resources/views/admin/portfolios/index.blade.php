@@ -50,11 +50,6 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $portfolio->user->name ?? 'N/A' }}</td> {{-- Asumsi Portfolio memiliki relasi ke User --}}
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $portfolio->created_at->format('d M Y H:i') }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <!-- {{-- Link Lihat Detail Portfolio --}}
-                            @if (Route::has('admin.portfolios.show'))
-                                <a href="{{ route('admin.portfolios.show', $portfolio->id) }}" class="text-blue-600 hover:text-blue-900 mr-2">Lihat</a>
-                            @endif -->
-
                             {{-- Form Hapus Portfolio --}}
                             @if (Route::has('admin.portfolios.destroy'))
                                 <form action="{{ route('admin.portfolios.destroy', $portfolio->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus portfolio ini? Aksi ini tidak dapat dibatalkan!');">

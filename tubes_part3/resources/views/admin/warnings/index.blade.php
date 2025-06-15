@@ -5,9 +5,7 @@
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-900">Manajemen Peringatan</h1>
-        {{-- Tombol untuk membuat peringatan baru --}}
-        {{-- Asumsi Anda akan membuat rute admin.warnings.create dan method di AdminController --}}
+        <h1 class="text-3xl font-bold text-gray-900">Manajemen Peringatan</h1>\
         @if (Route::has('admin.warnings.create'))
             <a href="{{ route('admin.warnings.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300">
                 <i class="fas fa-plus mr-2"></i> Buat Peringatan Baru
@@ -15,7 +13,6 @@
         @endif
     </div>
 
-    {{-- Pesan sukses atau error --}}
     @if (session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
             <span class="block sm:inline">{{ session('success') }}</span>
@@ -97,7 +94,6 @@
             </table>
         </div>
         
-        {{-- Bagian Pagination --}}
         <div class="p-4">
             {{ $warnings->links() }}
         </div>
