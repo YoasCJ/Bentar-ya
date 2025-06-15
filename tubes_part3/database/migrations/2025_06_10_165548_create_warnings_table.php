@@ -16,6 +16,7 @@ return new class extends Migration
             $table->timestamps();
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             $table->foreignId('admin_id')->constrained('users')->onDelete('cascade'); // Admin yang mengeluarkan peringatan (asumsi tabel admin juga 'users')
             $table->enum('warning_type', ['--Pilih Tipe--','Pelanggaran Aturan', 'Tindakan Akun (Blokir/Suspend)', 'Pengumuman Penting', 'Lain-lain'])->default('--Pilih Tipe--');
             $table->string('subject'); // Judul atau subjek peringatan
@@ -23,6 +24,8 @@ return new class extends Migration
             $table->enum('status', ['sent', 'read', 'resolved', 'pending_action'])->default('sent'); // Status peringatan
             $table->timestamp('expires_at')->nullable(); // Tanggal kadaluarsa (opsional)
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
@@ -34,6 +37,9 @@ return new class extends Migration
             $table->timestamp('expires_at')->nullable(); 
             $table->timestamps();
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

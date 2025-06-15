@@ -82,8 +82,12 @@
                 </span>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                 @if($post->user_id != auth()->id()) {{-- Hanya tampilkan tombol kontak jika bukan post sendiri --}}
                     {{-- Tombol Contact/Offer Help akan jadi link Email --}}
+=======
+                @if($post->user_id != auth()->id()) 
+>>>>>>> Stashed changes
 =======
                 @if($post->user_id != auth()->id()) 
 >>>>>>> Stashed changes
