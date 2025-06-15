@@ -6,4 +6,5 @@ Kelompok 2:
 6. Dara Saifa Mahiroh                   102022330396 - Profile dan Auth user           - darasaifa
 
 Skill Exchange adalah platform digital yang digunakan untuk mahasiswa dalam mengajar atau meminta bantuan dari mahasiswa lainnya. Disini usernya adalah mahasiswa yang sudah memiliki skill dan ingin sharing tentang skill tersebut, dan mahasiswa yang memamng membutuhkan tentor dalam skill tersebut.
+
 Sebelumnya saya (Yuha) ingin memohon maaf pak apabila ada commit di luar jam deadline dikarenakan yang bagian terakhir lupa di commit dan saat mau commit malah conflict semua dan untuk membenarkannya memerlukan waktu cukup banyak
