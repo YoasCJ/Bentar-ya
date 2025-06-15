@@ -70,9 +70,12 @@ class PostController extends Controller
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         if (Auth::id() !== $post->user_id && !(Auth::check() && Auth::user()->is_admin)) {
             return back()->with('error', 'Anda tidak memiliki izin untuk menghapus postingan ini.');
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======

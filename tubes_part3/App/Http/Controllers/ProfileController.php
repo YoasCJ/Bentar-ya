@@ -18,6 +18,7 @@ class ProfileController extends Controller
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         $targetUser = $user ?? Auth::user(); 
 
         if (!$targetUser) {
@@ -44,6 +45,8 @@ class ProfileController extends Controller
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
         $displayUser = $user ?? Auth::user();
 
         if (!$displayUser) {
@@ -60,6 +63,9 @@ class ProfileController extends Controller
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

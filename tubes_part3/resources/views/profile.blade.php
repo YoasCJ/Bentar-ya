@@ -13,6 +13,7 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                         {{ substr($targetUser->name, 0, 1) }}
                     </div>
                     <h2 class="text-xl font-semibold text-gray-900">{{ $targetUser->name }}</h2>
@@ -23,6 +24,18 @@
                 </div>
                 
                 @if($targetUser->id == auth()->id())
+=======
+                        {{ substr($displayUser->name, 0, 1) }}
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-900">{{ $displayUser->name }}</h2>
+                    <p class="text-gray-600">{{ $displayUser->department }} • {{ $displayUser->batch }}</p>
+                    @if($displayUser->description)
+                    <p class="mt-4 text-sm text-gray-700">{{ $displayUser->description }}</p>
+                    @endif
+                </div>
+                
+                @if($displayUser->id == auth()->id())
+>>>>>>> Stashed changes
 =======
                         {{ substr($displayUser->name, 0, 1) }}
                     </div>
@@ -85,7 +98,10 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         <!-- Warnings Section -->
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -119,7 +135,10 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         <!-- Portfolio Section -->
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -136,7 +155,11 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                     @if($targetUser->id == auth()->id())
+=======
+                    @if($displayUser->id == auth()->id())
+>>>>>>> Stashed changes
 =======
                     @if($displayUser->id == auth()->id())
 >>>>>>> Stashed changes
@@ -166,7 +189,11 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                             @if($targetUser->id == auth()->id())
+=======
+                            @if($displayUser->id == auth()->id())
+>>>>>>> Stashed changes
 =======
                             @if($displayUser->id == auth()->id())
 >>>>>>> Stashed changes
@@ -226,6 +253,7 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                         @if($targetUser->id == auth()->id())
                             Add your first portfolio item to showcase your work!
                         @else
@@ -233,6 +261,15 @@
                         @endif
                     </p>
                     @if($targetUser->id == auth()->id())
+=======
+                        @if($displayUser->id == auth()->id())
+                            Add your first portfolio item to showcase your work!
+                        @else
+                            {{ $displayUser->name }} hasn't added any portfolio items yet.
+                        @endif
+                    </p>
+                    @if($displayUser->id == auth()->id())
+>>>>>>> Stashed changes
 =======
                         @if($displayUser->id == auth()->id())
                             Add your first portfolio item to showcase your work!
@@ -280,6 +317,7 @@
         </div>
     </div>
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
@@ -368,6 +406,8 @@
                         </button>
                     </div>
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -834,7 +874,10 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     // Edit portfolio - MODIFIKASI INI UNTUK MENGISI DATA LAMA
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
