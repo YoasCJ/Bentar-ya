@@ -48,6 +48,22 @@ class PortfolioController extends Controller
         return redirect()->route('profile')->with('success', 'Portfolio added successfully!');
     }
 
+    public function json(Portfolio $portfolio)
+{
+    if ($portfolio->user_id !== Auth::id()) {
+        return response()->json(['error' => 'Forbidden'], 403);
+    }
+
+    return response()->json([
+        'id' => $portfolio->id,
+        'title' => $portfolio->title,
+        'description' => $portfolio->description,
+        'skills' => $portfolio->skills->pluck('id'), // kirim ID array
+        'link' => $portfolio->link,
+        'file_path' => $portfolio->file_path,
+    ]);
+}
+
     public function edit(Portfolio $portfolio)
     {
         if ($portfolio->user_id !== Auth::id()) {

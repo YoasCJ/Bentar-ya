@@ -62,6 +62,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/portfolio/{portfolio}/edit', [PortfolioController::class, 'edit'])->name('portfolio.edit');
     Route::put('/portfolio/{portfolio}', [PortfolioController::class, 'update'])->name('portfolio.update');
     Route::delete('/portfolio/{portfolio}', [PortfolioController::class, 'destroy'])->name('portfolio.destroy');
+    Route::get('/portfolio/{portfolio}/json', [PortfolioController::class, 'json'])->name('portfolio.json');
+    Route::get('/portfolio/{portfolio}/json', [PortfolioController::class, 'json'])->name('portfolio.json');
 });
 
 // ======================================================================================================

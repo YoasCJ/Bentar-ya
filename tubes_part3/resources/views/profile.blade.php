@@ -428,77 +428,65 @@
     
     // Edit portfolio - MODIFIKASI INI UNTUK MENGISI DATA LAMA
     function editPortfolio(portfolioId) {
-        // Ambil token CSRF dari meta tag (pastikan meta tag ada di <head> layout app)
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    fetch(`/portfolio/${portfolioId}/json`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        credentials: 'same-origin' // WAJIB agar session login dikirim
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Isi form
+        document.getElementById('editPortfolioTitle').value = data.title;
+        document.getElementById('editPortfolioDescription').value = data.description;
+        document.getElementById('editPortfolioLink').value = data.link || '';
+        document.getElementById('editPortfolioForm').action = `/portfolio/${portfolioId}`;
 
-        // Fetch data portfolio dari API
-        fetch(`/api/portfolios/${portfolioId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                // 'X-CSRF-TOKEN': csrfToken // CSRF token tidak selalu diperlukan untuk GET request API, tapi aman ditambahkan
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                // Tangani error HTTP (misal 404 Not Found)
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Isi field-field di modal edit portfolio
-            document.getElementById('editPortfolioTitle').value = data.title;
-            document.getElementById('editPortfolioDescription').value = data.description;
-            document.getElementById('editPortfolioLink').value = data.link || ''; // Gunakan || '' untuk null
-            // Input file tidak bisa diisi value-nya secara langsung untuk alasan keamanan
-            // Anda bisa menampilkan info file yang sudah ada
-
-            // Set action form untuk update
-            document.getElementById('editPortfolioForm').action = `/portfolio/${portfolioId}`;
-
-            // Reset dan tandai checkbox skills
-            const skillsContainer = document.getElementById('editPortfolioSkills');
-            skillsContainer.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                checkbox.checked = false; // Uncheck semua dulu
-            });
-
-            // Tandai skill yang terkait dengan portfolio ini
-            data.skills.forEach(skill => {
-                const checkbox = skillsContainer.querySelector(`input[type="checkbox"][value="${skill.id}"]`);
-                if (checkbox) {
-                    checkbox.checked = true;
-                }
-            });
-
-            // Tampilkan info file yang sudah ada (jika ada)
-            let currentFileDisplay = document.getElementById('editPortfolioCurrentFileDisplay');
-            if (!currentFileDisplay) {
-                // Jika elemen belum ada, buat (misal di bawah input file editPortfolioFile)
-                currentFileDisplay = document.createElement('p');
-                currentFileDisplay.id = 'editPortfolioCurrentFileDisplay';
-                currentFileDisplay.className = 'mt-1 text-sm text-gray-600';
-                document.getElementById('editPortfolioFile').parentNode.appendChild(currentFileDisplay);
-            }
-            if (data.file_path) {
-                const fileName = data.file_path.split('/').pop();
-                currentFileDisplay.innerHTML = `Current file: <a href="/storage/${data.file_path}" target="_blank" class="text-blue-500 hover:underline">${fileName}</a>`;
-                currentFileDisplay.classList.remove('hidden');
-            } else {
-                currentFileDisplay.classList.add('hidden');
-                currentFileDisplay.innerHTML = '';
-            }
-
-
-            // Tampilkan modal edit portfolio
-            document.getElementById('editPortfolioModal').classList.remove('hidden');
-        })
-        .catch(error => {
-            console.error('Error fetching portfolio data:', error);
-            alert('Gagal mengambil data portfolio. Silakan coba lagi. Cek console browser untuk detail.');
+        // Ceklis skill yang sesuai
+        const skillsContainer = document.getElementById('editPortfolioSkills');
+        skillsContainer.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = false;
         });
-    }
+        data.skills.forEach(skillId => {
+            const checkbox = skillsContainer.querySelector(`input[type="checkbox"][value="${skillId}"]`);
+            if (checkbox) {
+                checkbox.checked = true;
+            }
+        });
+
+        // Tampilkan file yang sudah di-upload (jika ada)
+        let currentFileDisplay = document.getElementById('editPortfolioCurrentFileDisplay');
+        if (!currentFileDisplay) {
+            currentFileDisplay = document.createElement('p');
+            currentFileDisplay.id = 'editPortfolioCurrentFileDisplay';
+            currentFileDisplay.className = 'mt-1 text-sm text-gray-600';
+            document.getElementById('editPortfolioFile').parentNode.appendChild(currentFileDisplay);
+        }
+
+        if (data.file_path) {
+            const fileName = data.file_path.split('/').pop();
+            currentFileDisplay.innerHTML = `Current file: <a href="/storage/${data.file_path}" target="_blank" class="text-blue-500 hover:underline">${fileName}</a>`;
+            currentFileDisplay.classList.remove('hidden');
+        } else {
+            currentFileDisplay.classList.add('hidden');
+            currentFileDisplay.innerHTML = '';
+        }
+
+        // Tampilkan modal
+        document.getElementById('editPortfolioModal').classList.remove('hidden');
+    })
+    .catch(error => {
+        console.error('Error fetching portfolio data:', error);
+        alert('Gagal mengambil data portfolio. Silakan coba lagi. Cek console browser untuk detail.');
+    });
+}
     
     // Delete portfolio
     function deletePortfolio(portfolioId) {
